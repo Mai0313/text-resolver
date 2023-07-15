@@ -1,0 +1,131 @@
+# @package _global_
+defaults:
+  - override /data: mnist
+  - override /model: mnist
+  - override /callbacks: default
+  - override /trainer: default
+  - override /extras: default
+  - override /paths: default
+
+task_name: "captcha"
+tags: ["dev"]
+train: True
+test: False
+compile: False
+ckpt_path: null
+seed: null
+data:
+  _target_: src.data.captcha_datamodule.CaptchaDataModule
+  batch_size: 64
+  num_workers: 0
+  pin_memory: False
+  dataset:
+    train:
+      raw_data: ${paths.data_dir}/train.zip
+      parsed_data: ${paths.data_dir}/train.npz
+    validation:
+      raw_data: ${paths.data_dir}/val.zip
+      parsed_data: ${paths.data_dir}/val.npz
+    test:
+      raw_data: ${paths.data_dir}/test.zip
+      parsed_data: ${paths.data_dir}/test.npz
+model:
+  _target_: src.models.captcha_module.CaptchaModule
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 0.001
+    weight_decay: 0.0
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.1
+    patience: 10
+  net:
+    _target_: src.models.components.unet.CaptchaNet
+  loss_fns:
+    _target_: torch.nn.MSELoss
+callbacks:
+  model_checkpoint:
+    _target_: lightning.pytorch.callbacks.ModelCheckpoint
+    dirpath: null
+    filename: epoch_{epoch:03d}
+    monitor: "val/loss"
+    verbose: False
+    save_last: True
+    save_top_k: -1
+    save_weights_only: False
+    mode: min
+    auto_insert_metric_name: True
+    every_n_train_steps: null
+    train_time_interval: null
+    every_n_epochs: 20
+    save_on_train_epoch_end: null
+  early_stopping:
+    monitor: "val/loss"
+    patience: 100
+    mode: min
+logger:
+  tensorboard:
+    _target_: lightning.pytorch.loggers.tensorboard.TensorBoardLogger
+    save_dir: ${paths.output_dir}/tensorboard/
+    name: null
+    log_graph: false
+    default_hp_metric: true
+    prefix: ''
+  csv:
+    _target_: lightning.pytorch.loggers.csv_logs.CSVLogger
+    save_dir: ${paths.output_dir}
+    name: csv/
+    prefix: ''
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: ${paths.output_dir}
+  accelerator: auto
+  strategy: auto
+  devices: [0]
+  num_nodes: 1
+  precision: 32-true
+  logger: logger
+  callbacks: [checkpoint_callback]
+  fast_dev_run: False
+  max_epochs: 720
+  min_epochs: null
+  max_steps: -1
+  min_steps: null
+  max_time: null
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  overfit_batches: 0.0
+  val_check_interval: null
+  check_val_every_n_epoch: 1
+  num_sanity_val_steps: null
+  log_every_n_steps: null
+  enable_checkpointing: null
+  enable_progress_bar: True
+  enable_model_summary: null
+  accumulate_grad_batches: 1
+  gradient_clip_val: null
+  gradient_clip_algorithm: null
+  deterministic: null
+  benchmark: null
+  inference_mode: True
+  use_distributed_sampler: True
+  detect_anomaly: False
+  barebones: False
+  plugins: null
+  sync_batchnorm: False
+  reload_dataloaders_every_n_epochs: 0
+paths:
+  root_dir: ${oc.env:PROJECT_ROOT}
+  data_dir: ${paths.root_dir}/data/
+  log_dir: ${paths.root_dir}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+extras:
+  ignore_warnings: True
+  enforce_tags: True
+  print_config: True
