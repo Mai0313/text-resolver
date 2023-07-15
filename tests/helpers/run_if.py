@@ -30,7 +30,6 @@ class RunIf:
     Fully compatible with `@pytest.mark`.
 
     Example:
-
         @RunIf(min_torch="1.8")
         @pytest.mark.parametrize("arg1", [1.0, 2.0])
         def test_wrapper(arg1):
@@ -54,22 +53,21 @@ class RunIf:
         mlflow: bool = False,
         **kwargs,
     ):
-        """
-        Args:
-            min_gpus: min number of GPUs required to run test
-            min_torch: minimum pytorch version to run test
-            max_torch: maximum pytorch version to run test
-            min_python: minimum python version required to run test
-            skip_windows: skip test for Windows platform
-            tpu: if TPU is available
-            sh: if `sh` module is required to run the test
-            fairscale: if `fairscale` module is required to run the test
-            deepspeed: if `deepspeed` module is required to run the test
-            wandb: if `wandb` module is required to run the test
-            neptune: if `neptune` module is required to run the test
-            comet: if `comet` module is required to run the test
-            mlflow: if `mlflow` module is required to run the test
-            kwargs: native pytest.mark.skipif keyword arguments
+        """Args:
+        min_gpus: min number of GPUs required to run test
+        min_torch: minimum pytorch version to run test
+        max_torch: maximum pytorch version to run test
+        min_python: minimum python version required to run test
+        skip_windows: skip test for Windows platform
+        tpu: if TPU is available
+        sh: if `sh` module is required to run the test
+        fairscale: if `fairscale` module is required to run the test
+        deepspeed: if `deepspeed` module is required to run the test
+        wandb: if `wandb` module is required to run the test
+        neptune: if `neptune` module is required to run the test
+        comet: if `comet` module is required to run the test
+        mlflow: if `mlflow` module is required to run the test
+        kwargs: native pytest.mark.skipif keyword arguments.
         """
         conditions = []
         reasons = []

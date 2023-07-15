@@ -5,13 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker" 
-    directory: "/" 
+  - package-ecosystem: "docker"
+    directory: "/"
     target-branch: "master"
     schedule:
       interval: "daily"
-  - package-ecosystem: "github-actions" 
-    directory: "/" 
+  - package-ecosystem: "github-actions"
+    directory: "/"
     target-branch: "master"
     schedule:
       interval: "daily"

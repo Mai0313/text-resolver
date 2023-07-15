@@ -1,8 +1,8 @@
 ---
 name: Disable CI jobs (PyTorch Dev Infra only)
 about: Use this template to disable CI jobs
-title: "DISABLED [WORKFLOW_NAME] / [PLATFORM_NAME] / [JOB_NAME]"
-labels: "module: ci"
+title: DISABLED [WORKFLOW_NAME] / [PLATFORM_NAME] / [JOB_NAME]
+labels: 'module: ci'
 ---
 
 > For example, DISABLED pull / win-vs2019-cpu-py3 / test (default). Once
@@ -17,4 +17,5 @@ labels: "module: ci"
 > jobs. The issue will be rejected otherwise.
 
 ## Reason
+
 *Provide a reason why this is needed and when this can be resolved*.

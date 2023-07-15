@@ -17,7 +17,6 @@ def extras(cfg: DictConfig) -> None:
     - Setting tags from command line
     - Rich config printing
     """
-
     # return if no `extras` config
     if not cfg.get("extras"):
         log.warning("Extras config not found! <cfg.extras=null>")
@@ -35,7 +34,8 @@ def extras(cfg: DictConfig) -> None:
 
     # pretty print config tree using Rich library
     if cfg.extras.get("print_config"):
-        log.info("Printing config tree with Rich! <cfg.extras.print_config=True>")
+        log.info(
+            "Printing config tree with Rich! <cfg.extras.print_config=True>")
         rich_utils.print_config_tree(cfg, resolve=True, save_to_file=True)
 
 
@@ -94,7 +94,6 @@ def task_wrapper(task_func: Callable) -> Callable:
 
 def get_metric_value(metric_dict: dict, metric_name: str) -> float:
     """Safely retrieves value of the metric logged in LightningModule."""
-
     if not metric_name:
         log.info("Metric name is None! Skipping metric value retrieval...")
         return None
