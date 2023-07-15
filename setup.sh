@@ -17,4 +17,4 @@ source activate torch2
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # 安裝其他需要的套件
-pip install ipykernel ipywidgets pandas numpy autoroot hydra-core pytorch-lightning matplotlib opencv-python notebook
+pip install ipykernel ipywidgets pandas numpy autoroot hydra-core pytorch-lightning matplotlib opencv-python notebook pillow dvc-gdrive dvc pre-commit

@@ -1,4 +1,4 @@
-name: Coding Style Linter
+name: Pre-Commit Hooks
 
 # on: [ push, pull_request ]
 on:
@@ -10,18 +10,10 @@ on:
     branches:
       - master
       - release/*
-
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v3
-    - uses: trilom/file-changes-action@v1.2.4
-      with:
-        output: " "
-    - name: List modified files
-      run: echo '${{ steps.file_changes.outputs.files}}'
     - uses: pre-commit/action@v3.0.0
-      with:
-        extra_args: --files ${{ steps.file_changes.outputs.files}}
