@@ -67,7 +67,7 @@ repos:
     rev: 1.7.0
     hooks:
       - id: nbqa-ruff
-        args: ["--config=.ruff.toml"]
+        args: ["--config=.ruff.toml", "--fix"]
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v2.3.0

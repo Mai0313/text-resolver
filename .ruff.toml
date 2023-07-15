@@ -45,6 +45,8 @@ select = [
     "D",
     # pyupgrade
     "UP",
+    # isort
+    "I",
     ]
 
 # Ignore a variety of commonly ignored errors.

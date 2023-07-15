@@ -19,4 +19,4 @@ jobs:
         with:
           src: "."
           version: v0.0.278
-          args: --fix --exit-non-zero-on-fix
+          args: --config=.ruff.toml --fix
