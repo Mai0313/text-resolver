@@ -1,4 +1,6 @@
 import numpy as np
+import os
+import glob
 from PIL import Image
 from matplotlib import pyplot as plt
 
@@ -16,7 +18,10 @@ plt.imshow(img_array)
 
 class PictureParser:
 
-    def __init__(self):
+    def __init__(self, path):
+        self.path = path
+
+    def get_data_path(self):
         pass
 
     def get_parsed_data(self):
