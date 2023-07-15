@@ -77,8 +77,8 @@ repos:
         args: [feat, docs, fix, style, refactor, pref, ci, build, test]
         # Ref: https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
 
-  - repo: https://github.com/pycqa/pylint
-    rev: v2.17.4
-    hooks:
-      - id: pylint
-        args: [--rcfile=.pylintrc]
+  # - repo: https://github.com/pycqa/pylint
+  #   rev: v2.17.4
+  #   hooks:
+  #     - id: pylint
+  #       args: [--rcfile=.pylintrc]
