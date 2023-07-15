@@ -1,4 +1,4 @@
-name: pre-commit-hook
+name: Coding Style Linter
 
 # on: [ push, pull_request ]
 on:

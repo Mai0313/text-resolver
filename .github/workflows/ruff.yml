@@ -1,4 +1,4 @@
-name: Ruff Formatter
+name: Auto Ruff
 
 on:
   push:
