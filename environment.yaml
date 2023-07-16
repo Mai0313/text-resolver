@@ -1,44 +1,46 @@
-# reasons you might want to use `environment.yaml` instead of `requirements.txt`:
-# - pip installs packages in a loop, without ensuring dependencies across all packages
-#   are fulfilled simultaneously, but conda achieves proper dependency control across
-#   all packages
-# - conda allows for installing packages without requiring certain compilers or
-#   libraries to be available in the system, since it installs precompiled binaries
-
-name: myenv
-
+name: torch2
 channels:
-  - pytorch
-  - conda-forge
   - defaults
-
-# it is strongly recommended to specify versions of packages installed through conda
-# to avoid situation when version-unspecified packages install their latest major
-# versions which can sometimes break things
-
-# current approach below keeps the dependencies in the same major versions across all
-# users, but allows for different minor and patch versions of packages where backwards
-# compatibility is usually guaranteed
-
 dependencies:
-  - pytorch=2.*
-  - torchvision=0.*
-  - lightning=2.*
-  - torchmetrics=0.*
-  - hydra-core=1.*
-  - rich=13.*
-  - pre-commit=3.*
-  - pytest=7.*
-
-  # --------- loggers --------- #
-  # - wandb
-  # - neptune-client
-  # - mlflow
-  # - comet-ml
-  # - aim>=3.16.2 # no lower than 3.16.2, see https://github.com/aimhubio/aim/issues/2550
-
-  - pip>=23
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=1_gnu
+  - ca-certificates=2023.05.30=h06a4308_0
+  - ld_impl_linux-64=2.38=h1181459_1
+  - libffi=3.4.4=h6a678d5_0
+  - libgcc-ng=11.2.0=h1234567_1
+  - libgomp=11.2.0=h1234567_1
+  - libstdcxx-ng=11.2.0=h1234567_1
+  - ncurses=6.4=h6a678d5_0
+  - openssl=1.1.1u=h7f8727e_0
+  - pip=23.1.2=py39h06a4308_0
+  - python=3.9.15=h7a1cb2a_2
+  - readline=8.2=h5eee18b_0
+  - setuptools=67.8.0=py39h06a4308_0
+  - sqlite=3.41.2=h5eee18b_0
+  - tk=8.6.12=h1ccaba5_0
+  - tzdata=2023c=h04d1e81_0
+  - wheel=0.38.4=py39h06a4308_0
+  - xz=5.4.2=h5eee18b_0
+  - zlib=1.2.13=h5eee18b_0
   - pip:
-      - hydra-optuna-sweeper
-      - hydra-colorlog
-      - pyrootutils
+      - certifi==2022.12.7
+      - charset-normalizer==2.1.1
+      - cmake==3.25.0
+      - filelock==3.9.0
+      - idna==3.4
+      - jinja2==3.1.2
+      - lit==15.0.7
+      - markupsafe==2.1.2
+      - mpmath==1.2.1
+      - networkx==3.0
+      - numpy==1.24.1
+      - pillow==9.3.0
+      - requests==2.28.1
+      - sympy==1.11.1
+      - torch==2.0.1+cu118
+      - torchaudio==2.0.2+cu118
+      - torchvision==0.15.2+cu118
+      - triton==2.0.0
+      - typing-extensions==4.4.0
+      - urllib3==1.26.13
+prefix: /home/wei/miniconda3/envs/torch2
