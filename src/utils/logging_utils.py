@@ -20,7 +20,6 @@ def log_hyperparameters(object_dict: Dict[str, Any]) -> None:
         - `"model"`: The Lightning model.
         - `"trainer"`: The Lightning trainer.
     """
-
     hparams = {}
 
     cfg = OmegaConf.to_container(object_dict["cfg"])
@@ -38,11 +37,7 @@ def log_hyperparameters(object_dict: Dict[str, Any]) -> None:
     hparams["model/params/trainable"] = sum(
         p.numel() for p in model.parameters() if p.requires_grad
     )
-        p.numel() for p in model.parameters() if p.requires_grad
-    )
     hparams["model/params/non_trainable"] = sum(
-        p.numel() for p in model.parameters() if not p.requires_grad
-    )
         p.numel() for p in model.parameters() if not p.requires_grad
     )
 

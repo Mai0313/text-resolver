@@ -19,7 +19,6 @@ def extras(cfg: DictConfig) -> None:
 
     :param cfg: A DictConfig object containing the config tree.
     """
-
     # return if no `extras` config
     if not cfg.get("extras"):
         log.warning("Extras config not found! <cfg.extras=null>")
