@@ -1,12 +1,13 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, List
 
 import torch
 from lightning import LightningModule
+from torch.nn import functional as F
 from torchmetrics import MaxMetric, MeanMetric
 from torchmetrics.classification.accuracy import Accuracy
+from src.utils.get_visualize import DataVisualizer
 
-
-class MNISTLitModule(LightningModule):
+class CaptchaModule(LightningModule):
     """Example of a `LightningModule` for MNIST classification.
 
     A `LightningModule` implements 8 key methods:
@@ -43,6 +44,7 @@ class MNISTLitModule(LightningModule):
         self,
         net: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
+        loss_fns: List[torch.nn.Module],
         scheduler: torch.optim.lr_scheduler,
     ) -> None:
         """Initialize a `MNISTLitModule`.
@@ -60,7 +62,7 @@ class MNISTLitModule(LightningModule):
         self.net = net
 
         # loss function
-        self.criterion = torch.nn.CrossEntropyLoss()
+        self.loss_fns = loss_fns
 
         # metric objects for calculating and averaging accuracy across batches
         self.train_acc = Accuracy(task="multiclass", num_classes=10)
@@ -94,42 +96,24 @@ class MNISTLitModule(LightningModule):
     def model_step(
         self, batch: Tuple[torch.Tensor, torch.Tensor]
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        """Perform a single model step on a batch of data.
+        images, labels_encoded = batch
 
-        :param batch: A batch of data (a tuple) containing the input tensor of images and target labels.
+        logits = self.forward(images)
+        labels_one_hot = F.one_hot(labels_encoded, num_classes=36).float()
+        logits = logits.view(-1, 5, 36)
 
-        :return: A tuple containing (in order):
-            - A tensor of losses.
-            - A tensor of predictions.
-            - A tensor of target labels.
-        """
-        x, y = batch
-        logits = self.forward(x)
-        loss = self.criterion(logits, y)
+        loss = self.loss_fns(logits, labels_one_hot)
         preds = torch.argmax(logits, dim=1)
-        return loss, preds, y
+        return loss, preds, labels_one_hot, images
 
     def training_step(
         self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int
     ) -> torch.Tensor:
-        """Perform a single training step on a batch of data from the training set.
-
-        :param batch: A batch of data (a tuple) containing the input tensor of images and target
-            labels.
-        :param batch_idx: The index of the current batch.
-        :return: A tensor of losses between model predictions and targets.
-        """
-        loss, preds, targets = self.model_step(batch)
-
-        # update and log metrics
+        loss, preds, labels, images = self.model_step(batch)
         self.train_loss(loss)
-        self.train_acc(preds, targets)
-        self.log("train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("train/acc", self.train_acc, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("train/acc", self.train_acc, on_step=False, on_epoch=True, prog_bar=True)
-
-        # return loss or backpropagation will fail
+        # self.train_acc(preds, labels)
+        self.log('train/loss', self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
+        # self.log('train/acc', self.train_acc, on_step=False, on_epoch=True, prog_bar=True)
         return loss
 
     def on_train_epoch_end(self) -> None:
@@ -137,46 +121,20 @@ class MNISTLitModule(LightningModule):
         pass
 
     def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        """Perform a single validation step on a batch of data from the validation set.
-
-        :param batch: A batch of data (a tuple) containing the input tensor of images and target
-            labels.
-        :param batch_idx: The index of the current batch.
-        """
-        loss, preds, targets = self.model_step(batch)
-
-        # update and log metrics
+        loss, preds, labels, images = self.model_step(batch)
         self.val_loss(loss)
-        self.val_acc(preds, targets)
         self.log("val/loss", self.val_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("val/acc", self.val_acc, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("val/loss", self.val_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("val/acc", self.val_acc, on_step=False, on_epoch=True, prog_bar=True)
+        if batch_idx % 100 == 0:
+            fig = DataVisualizer(self.net, self.device).visualize_prediction(images, labels)
+            self.logger.experiment.add_figure('Predicted Images', fig, self.global_step)
 
     def on_validation_epoch_end(self) -> None:
-        "Lightning hook that is called when a validation epoch ends."
-        acc = self.val_acc.compute()  # get current val acc
-        self.val_acc_best(acc)  # update best so far val acc
-        # log `val_acc_best` as a value through `.compute()` method, instead of as a metric object
-        # otherwise metric would be reset by lightning after each epoch
-        self.log("val/acc_best", self.val_acc_best.compute(), sync_dist=True, prog_bar=True)
+        pass
 
     def test_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        """Perform a single test step on a batch of data from the test set.
-
-        :param batch: A batch of data (a tuple) containing the input tensor of images and target
-            labels.
-        :param batch_idx: The index of the current batch.
-        """
-        loss, preds, targets = self.model_step(batch)
-
-        # update and log metrics
+        loss, preds, labels, images = self.model_step(batch)
         self.test_loss(loss)
-        self.test_acc(preds, targets)
         self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("test/acc", self.test_acc, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log("test/acc", self.test_acc, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
@@ -208,4 +166,4 @@ class MNISTLitModule(LightningModule):
 
 
 if __name__ == "__main__":
-    _ = MNISTLitModule(None, None, None)
+    _ = CaptchaModule(None, None, None)
