@@ -29,6 +29,7 @@ data:
     test:
       raw_data: ${paths.data_dir}/val  # can be a folder or zip file
       parsed_data: ${paths.data_dir}/parsed_data/test.npz
+  force_parse_data: True
 model:
   _target_: src.models.captcha_module.CaptchaModule
   optimizer:

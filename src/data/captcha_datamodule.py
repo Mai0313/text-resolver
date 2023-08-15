@@ -20,6 +20,7 @@ class CaptchaDataModule(LightningDataModule):
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
+        force_parse_data: bool = False,
     ) -> None:
         super().__init__()
         self.save_hyperparameters(logger=False)
@@ -27,18 +28,18 @@ class CaptchaDataModule(LightningDataModule):
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
+        self.force_parse_data = force_parse_data
 
     @property
     def num_classes(self) -> int:
         return 36
 
     def prepare_data(self) -> None:
-        # 使用 CaptchaTrainLoader 處理圖像並保存到 NPZ 文件
-        if not os.path.exists(self.hparams.dataset.train.parsed_data):
+        if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
-        if not os.path.exists(self.hparams.dataset.validation.parsed_data):
+        if not os.path.exists(self.hparams.dataset.validation.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
-        if not os.path.exists(self.hparams.dataset.test.parsed_data):
+        if not os.path.exists(self.hparams.dataset.test.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
 
     def setup(self, stage: Optional[str] = None) -> None:
