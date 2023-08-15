@@ -69,7 +69,7 @@ class CaptchaDataModule(LightningDataModule):
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
         )
-    
+
     def test_dataloader(self) -> DataLoader[Any]:
         return DataLoader(
             dataset=self.data_test,

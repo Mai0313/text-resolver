@@ -1,14 +1,16 @@
 import autorootcwd  # noqa: F401
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
+
 from src.utils.image_encoder import ImageEncoder
+
 
 class DataVisualizer:
     def __init__(self, model, device):
         self.model = model
         self.device = device
-    
+
     def visualize_prediction(self, images, labels):
         indices = np.random.choice(len(images), 10, replace=False)  # 隨機選擇10個索引
 

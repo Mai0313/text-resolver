@@ -1,6 +1,7 @@
 import autorootcwd  # noqa: F401
 import torch
 
+
 class ImageEncoder:
     def __init__(self):
         pass
@@ -16,7 +17,7 @@ class ImageEncoder:
                     encoded_label.append(ord(char) - ord('A') + 10)
             encoded_labels.append(torch.tensor(encoded_label))
         return torch.stack(encoded_labels)
-    
+
     def decode_output(self, output):
         decoded_label = []
         for char_prob in output:
