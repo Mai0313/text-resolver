@@ -30,7 +30,7 @@ class DataPaser:
         labels = []
         if file_path.endswith("zip"):
             with zipfile.ZipFile(file_path, 'r') as zipf:
-                with tqdm(zipf.namelist(), desc="Processing ZIP") as pbar: # 使用 pbar 為進度條變量
+                with tqdm(zipf.namelist(), desc="Processing ZIP") as pbar:
                     for file_name in pbar:
                         if file_name.endswith('.png') or file_name.endswith('.jpg'):
                             with zipf.open(file_name) as file:
@@ -38,17 +38,17 @@ class DataPaser:
                                 if image is not None:
                                     processed_images.append(image)
                                     labels.append(label)
-                                    pbar.set_postfix({"Current label": label}) # 更新進度條的描述
+                                    pbar.set_postfix({"Current label": label})
         else:
             image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
-            with tqdm(image_paths, desc="Processing images") as pbar: # 使用 pbar 為進度條變量
+            with tqdm(image_paths, desc="Processing images") as pbar:
                 for image_path in pbar:
                     with open(f"{file_path}/{image_path}", 'rb') as file:
                         image, label = self.__process_image(file, f"{file_path}/{image_path}")
                         if image is not None:
                             processed_images.append(image)
                             labels.append(label)
-                            pbar.set_postfix({"Current label": label}) # 更新進度條的描述
+                            pbar.set_postfix({"Current label": label})
 
         np.savez(save_path, images=processed_images, labels=labels)
         return processed_images, labels
