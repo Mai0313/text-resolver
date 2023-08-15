@@ -129,4 +129,4 @@ keep-runtime-typing = true
 
 [isort]
 combine-as-imports = true
-force-single-line = true
+force-single-line = false
