@@ -1,5 +1,6 @@
 import os
 import zipfile
+import glob
 
 import autorootcwd  # noqa: F401
 import numpy as np
@@ -12,35 +13,40 @@ class DataPaser:
     def __init__(self, expected_label_length=5):
         self.expected_label_length = expected_label_length
 
-    def process_images(self, zip_file_path, save_path):
+    def process_images(self, file_path, save_path):
         processed_images = []
         labels = []
-        with zipfile.ZipFile(zip_file_path, 'r') as zipf:
-            for file_name in zipf.namelist():
-                if file_name.endswith('.png'):
-                    with zipf.open(file_name) as file:
-                        image = Image.open(file).convert('L')
-                        label = os.path.splitext(os.path.basename(file_name))[0]
-                        if len(label) != self.expected_label_length:
-                            continue
-                        if image.size != (58, 20):
-                            image = image.resize((58, 20))
-                        image_array = np.array(image)
-                        image_normalized = image_array / 255.0
-                        processed_images.append(image_normalized)
+        if file_path.endswith("zip"):
+            with zipfile.ZipFile(file_path, 'r') as zipf:
+                for file_name in zipf.namelist():
+                    if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                        with zipf.open(file_name) as file:
+                            image, label = self.process_image(file, file_name)
+                            if image is not None:
+                                processed_images.append(image)
+                                labels.append(label)
+        else:
+            image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
+            for image_path in image_paths:
+                with open(f"{file_path}/{image_path}", 'rb') as file:
+                    image, label = self.process_image(file, f"{file_path}/{image_path}")
+                    if image is not None:
+                        processed_images.append(image)
                         labels.append(label)
 
         np.savez(save_path, images=processed_images, labels=labels)
         return processed_images, labels
     
-    def process_test_images(self, image_path):
-        with Image.open(image_path) as img:
-            img = img.convert('L')
-            if img.size != (20, 58):
-                img = img.resize((20, 58))
-            img_array = np.array(img)
-            img_normalized = img_array / 255.0
-        return img_normalized
+    def process_image(self, file, file_name):
+        image = Image.open(file).convert('L')
+        label = os.path.splitext(os.path.basename(file_name))[0]
+        if len(label) != self.expected_label_length:
+            return None, None
+        if image.size != (58, 20):
+            image = image.resize((58, 20))
+        image_array = np.array(image)
+        image_normalized = image_array / 255.0
+        return image_normalized, label
 
 class CaptchaDataset(Dataset):
     def __init__(self, npz_file):
