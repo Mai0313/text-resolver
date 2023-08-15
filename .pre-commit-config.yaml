@@ -34,21 +34,21 @@ repos:
         args:
           - --maxkb=50
 
-  # python docstring coverage checking
-  - repo: https://github.com/econchick/interrogate
-    rev: 1.5.0 # or master if you're bold
-    hooks:
-      - id: interrogate
-        args:
-          [
-            --verbose,
-            --fail-under=80,
-            --ignore-init-module,
-            --ignore-init-method,
-            --ignore-module,
-            --ignore-nested-functions,
-            -vv,
-          ]
+  # # python docstring coverage checking
+  # - repo: https://github.com/econchick/interrogate
+  #   rev: 1.5.0 # or master if you're bold
+  #   hooks:
+  #     - id: interrogate
+  #       args:
+  #         [
+  #           --verbose,
+  #           --fail-under=80,
+  #           --ignore-init-module,
+  #           --ignore-init-method,
+  #           --ignore-module,
+  #           --ignore-nested-functions,
+  #           -vv,
+  #         ]
 
   # md formatting
   - repo: https://github.com/executablebooks/mdformat
