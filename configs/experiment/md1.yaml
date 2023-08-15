@@ -44,7 +44,7 @@ model:
     factor: 0.1
     patience: 10
   net:
-    _target_: src.models.components.unet.CaptchaNet
+    _target_: src.models.components.cnn.CaptchaNet
   loss_fns:
     _target_: torch.nn.MSELoss
 callbacks:
