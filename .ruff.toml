@@ -103,7 +103,7 @@ unfixable = []
 extend-exclude = ["logs", "data", "*.sql", "__init__.py"]
 
 # In addition to the standard set of inclusions, include `.pyw` files.
-extend-include = ["*.ipynb"]
+extend-include = ["*.ipynb", ".sh"]
 
 # ===================
 #     Additional    #
