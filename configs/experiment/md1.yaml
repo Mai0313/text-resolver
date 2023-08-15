@@ -29,7 +29,7 @@ data:
     test:
       raw_data: ${paths.data_dir}/val  # can be a folder or zip file
       parsed_data: ${paths.data_dir}/parsed_data/test.npz
-  force_parse_data: True
+  force_parse_data: False
 model:
   _target_: src.models.captcha_module.CaptchaModule
   optimizer:
@@ -83,12 +83,12 @@ logger:
 trainer:
   _target_: lightning.pytorch.trainer.Trainer
   default_root_dir: ${paths.output_dir}
-  accelerator: auto
+  accelerator: gpu
   strategy: auto
-  devices: [0]
+  devices: auto
   num_nodes: 1
   precision: 32-true
-  logger: logger
+  logger: True
   callbacks: [checkpoint_callback]
   fast_dev_run: False
   max_epochs: 720
