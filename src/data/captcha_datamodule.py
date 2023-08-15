@@ -8,7 +8,7 @@ from lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.transforms import ToTensor
 
-from src.data.components.build_dataset import DataPaser, CaptchaDataset
+from src.data.components.build_dataset import DataParser, CaptchaDataset
 
 class CaptchaDataModule(LightningDataModule):
 
@@ -35,11 +35,11 @@ class CaptchaDataModule(LightningDataModule):
     def prepare_data(self) -> None:
         # 使用 CaptchaTrainLoader 處理圖像並保存到 NPZ 文件
         if not os.path.exists(self.hparams.dataset.train.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
+            DataParser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
         if not os.path.exists(self.hparams.dataset.validation.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
+            DataParser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
         if not os.path.exists(self.hparams.dataset.test.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
+            DataParser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
 
     def setup(self, stage: Optional[str] = None) -> None:
         self.hparams.train_dataset = self.hparams.dataset.train.parsed_data

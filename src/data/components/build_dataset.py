@@ -10,7 +10,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 from src.utils.image_encoder import ImageEncoder
 
-class DataPaser:
+class DataParser:
     def __init__(self, expected_label_length=5):
         self.expected_label_length = expected_label_length
 
