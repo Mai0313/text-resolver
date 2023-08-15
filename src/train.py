@@ -33,7 +33,9 @@ log = utils.get_pylogger(__name__)
 
 @utils.task_wrapper
 def train(cfg: DictConfig) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Trains the model. Can additionally evaluate on a testset, using best weights obtained during
+    """Trains the model.
+
+    Can additionally evaluate on a testset, using best weights obtained during
     training.
 
     This method is wrapped in optional @task_wrapper decorator, that controls the behavior during

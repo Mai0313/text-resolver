@@ -12,7 +12,8 @@ class DataVisualizer:
         self.device = device
 
     def visualize_prediction(self, images, labels):
-        indices = np.random.choice(len(images), 10, replace=False)  # 隨機選擇10個索引
+        """Visualize the prediction of the model."""
+        indices = np.random.choice(len(images), 10, replace=False)  # noqa: NPY002
 
         fig, axs = plt.subplots(5, 2, figsize=(10, 25))
         for i, index in enumerate(indices):

@@ -119,7 +119,7 @@ class CaptchaModule(LightningModule):
         return loss
 
     def on_train_epoch_end(self) -> None:
-        "Lightning hook that is called when a training epoch ends."
+        """Lightning hook that is called when a training epoch ends."""
         pass
 
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:

@@ -12,9 +12,19 @@ from src.utils.image_encoder import ImageEncoder
 
 class DataParser:
     def __init__(self, expected_label_length=5):
+        """Initialize the data parser with the expected length of the label."""
         self.expected_label_length = expected_label_length
 
     def __process_image(self, file, file_name):
+        """Process a single image by normalizing and resizing.
+
+        Args:
+            file: File object of the image.
+            file_name: Name of the image file.
+
+        Returns:
+            Tuple of processed image and corresponding label.
+        """
         image = Image.open(file).convert('L')
         label = os.path.splitext(os.path.basename(file_name))[0]
         if len(label) != self.expected_label_length:
@@ -26,6 +36,15 @@ class DataParser:
         return image_normalized, label
 
     def process_images(self, file_path, save_path):
+        """Process images from a given path and save them.
+
+        Args:
+            file_path: Path to the directory or ZIP file containing images.
+            save_path: Path to save the processed images and labels.
+
+        Returns:
+            Tuple of lists containing processed images and labels.
+        """
         processed_images = []
         labels = []
         if file_path.endswith("zip"):
@@ -55,16 +74,28 @@ class DataParser:
 
 class CaptchaDataset(Dataset):
     def __init__(self, npz_file):
+        """Initialize the dataset with the given file path.
+
+        Args:
+            npz_file: Path to the NPZ file containing images and labels.
+        """
         loaded_data = np.load(npz_file)
         self.images = loaded_data['images']
         self.labels = loaded_data['labels']
 
     def __len__(self):
-        """返回數據集的大小."""
+        """Return the size of the dataset."""
         return len(self.images)
 
     def __getitem__(self, index):
-        """返回索引處的數據。"""
+        """Return the data at the specified index.
+
+        Args:
+            index: Index of the data to retrieve.
+
+        Returns:
+            Tuple containing image tensor and encoded label.
+        """
         image = self.images[index]
         label = self.labels[index]
         encoded_label = ImageEncoder().encode_labels([label])[0]  # 使用你的編碼函數

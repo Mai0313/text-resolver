@@ -8,8 +8,8 @@ name: Code Quality PR
 
 on:
   pull_request:
-    branches: 
-      - main
+    branches:
+      - master
       - release/*
 
 jobs:
