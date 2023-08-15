@@ -8,7 +8,7 @@ from lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.transforms import ToTensor
 
-from src.data.components.build_dataset import DataPaser, CaptchaDataset
+from src.data.components.build_dataset import DataParser, CaptchaDataset
 
 class CaptchaDataModule(LightningDataModule):
 
@@ -20,6 +20,7 @@ class CaptchaDataModule(LightningDataModule):
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
+        force_parse_data: bool = False,
     ) -> None:
         super().__init__()
         self.save_hyperparameters(logger=False)
@@ -27,22 +28,42 @@ class CaptchaDataModule(LightningDataModule):
         self.data_train: Optional[Dataset] = None
         self.data_val: Optional[Dataset] = None
         self.data_test: Optional[Dataset] = None
+        self.force_parse_data = force_parse_data
 
     @property
     def num_classes(self) -> int:
+        """Get the number of classes.
+
+        :return: The number of MNIST classes (10).
+        """
         return 36
 
     def prepare_data(self) -> None:
-        # 使用 CaptchaTrainLoader 處理圖像並保存到 NPZ 文件
-        print("Processing images...")
-        if not os.path.exists(self.hparams.dataset.train.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
-        if not os.path.exists(self.hparams.dataset.validation.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
-        if not os.path.exists(self.hparams.dataset.test.parsed_data):
-            DataPaser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
+        """Download data if needed. Lightning ensures that `self.prepare_data()` is called only
+        within a single process on CPU, so you can safely add your downloading logic within. In
+        case of multi-node training, the execution of this hook depends upon
+        `self.prepare_data_per_node()`.
+
+        Do not use it to assign state (self.x = y).
+        """
+        if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
+            DataParser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
+        if not os.path.exists(self.hparams.dataset.validation.parsed_data) or self.force_parse_data:
+            DataParser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
+        if not os.path.exists(self.hparams.dataset.test.parsed_data) or self.force_parse_data:
+            DataParser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
 
     def setup(self, stage: Optional[str] = None) -> None:
+        """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
+
+        This method is called by Lightning before `trainer.fit()`, `trainer.validate()`, `trainer.test()`, and
+        `trainer.predict()`, so be careful not to execute things like random split twice! Also, it is called after
+        `self.prepare_data()` and there is a barrier in between which ensures that all the processes proceed to
+        `self.setup()` once the data is prepared and available for use.
+
+        :param stage: The stage to setup. Either `"fit"`, `"validate"`, `"test"`, or `"predict"`. Defaults to ``None``.
+        """
+        # load and split datasets only if not loaded already
         self.hparams.train_dataset = self.hparams.dataset.train.parsed_data
         self.hparams.val_dataset = self.hparams.dataset.validation.parsed_data
         self.hparams.test_dataset = self.hparams.dataset.test.parsed_data
@@ -53,6 +74,10 @@ class CaptchaDataModule(LightningDataModule):
             self.data_test = CaptchaDataset(self.hparams.test_dataset)
 
     def train_dataloader(self) -> DataLoader[Any]:
+        """Create and return the train dataloader.
+
+        :return: The train dataloader.
+        """
         return DataLoader(
             dataset=self.data_train,
             batch_size=self.hparams.batch_size,
@@ -62,6 +87,10 @@ class CaptchaDataModule(LightningDataModule):
         )
 
     def val_dataloader(self) -> DataLoader[Any]:
+        """Create and return the validation dataloader.
+
+        :return: The validation dataloader.
+        """
         return DataLoader(
             dataset=self.data_val,
             batch_size=self.hparams.batch_size,
@@ -69,8 +98,12 @@ class CaptchaDataModule(LightningDataModule):
             pin_memory=self.hparams.pin_memory,
             shuffle=False,
         )
-    
+
     def test_dataloader(self) -> DataLoader[Any]:
+        """Create and return the test dataloader.
+
+        :return: The test dataloader.
+        """
         return DataLoader(
             dataset=self.data_test,
             batch_size=self.hparams.batch_size,

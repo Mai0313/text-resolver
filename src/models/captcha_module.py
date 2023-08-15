@@ -1,11 +1,13 @@
-from typing import Any, Dict, Tuple, List
+from typing import Any
 
 import torch
 from lightning import LightningModule
 from torch.nn import functional as F
 from torchmetrics import MaxMetric, MeanMetric
 from torchmetrics.classification.accuracy import Accuracy
+
 from src.utils.get_visualize import DataVisualizer
+
 
 class CaptchaModule(LightningModule):
     """Example of a `LightningModule` for MNIST classification.
@@ -44,7 +46,7 @@ class CaptchaModule(LightningModule):
         self,
         net: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
-        loss_fns: List[torch.nn.Module],
+        loss_fns: list[torch.nn.Module],
         scheduler: torch.optim.lr_scheduler,
     ) -> None:
         """Initialize a `MNISTLitModule`.
@@ -94,8 +96,8 @@ class CaptchaModule(LightningModule):
         self.val_acc_best.reset()
 
     def model_step(
-        self, batch: Tuple[torch.Tensor, torch.Tensor]
-    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        self, batch: tuple[torch.Tensor, torch.Tensor]
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         images, labels_encoded = batch
 
         logits = self.forward(images)
@@ -107,7 +109,7 @@ class CaptchaModule(LightningModule):
         return loss, preds, labels_one_hot, images
 
     def training_step(
-        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int
+        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
     ) -> torch.Tensor:
         loss, preds, labels, images = self.model_step(batch)
         self.train_loss(loss)
@@ -117,10 +119,10 @@ class CaptchaModule(LightningModule):
         return loss
 
     def on_train_epoch_end(self) -> None:
-        "Lightning hook that is called when a training epoch ends."
+        """Lightning hook that is called when a training epoch ends."""
         pass
 
-    def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
+    def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         loss, preds, labels, images = self.model_step(batch)
         self.val_loss(loss)
         self.log("val/loss", self.val_loss, on_step=False, on_epoch=True, prog_bar=True)
@@ -131,7 +133,7 @@ class CaptchaModule(LightningModule):
     def on_validation_epoch_end(self) -> None:
         pass
 
-    def test_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
+    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         loss, preds, labels, images = self.model_step(batch)
         self.test_loss(loss)
         self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
@@ -140,7 +142,7 @@ class CaptchaModule(LightningModule):
         """Lightning hook that is called when a test epoch ends."""
         pass
 
-    def configure_optimizers(self) -> Dict[str, Any]:
+    def configure_optimizers(self) -> dict[str, Any]:
         """Configures optimizers and learning-rate schedulers to be used for training.
 
         Normally you'd need one, but in the case of GANs or similar you might need multiple.

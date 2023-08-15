@@ -21,14 +21,15 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/train.zip
-      parsed_data: ${paths.data_dir}/train.npz
+      raw_data: ${paths.data_dir}/train  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/train.npz
     validation:
-      raw_data: ${paths.data_dir}/val.zip
-      parsed_data: ${paths.data_dir}/val.npz
+      raw_data: ${paths.data_dir}/val  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/val.npz
     test:
-      raw_data: ${paths.data_dir}/test.zip
-      parsed_data: ${paths.data_dir}/test.npz
+      raw_data: ${paths.data_dir}/val  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/test.npz
+  force_parse_data: False
 model:
   _target_: src.models.captcha_module.CaptchaModule
   optimizer:
@@ -82,12 +83,12 @@ logger:
 trainer:
   _target_: lightning.pytorch.trainer.Trainer
   default_root_dir: ${paths.output_dir}
-  accelerator: auto
+  accelerator: gpu
   strategy: auto
-  devices: [0]
+  devices: auto
   num_nodes: 1
   precision: 32-true
-  logger: logger
+  logger: True
   callbacks: [checkpoint_callback]
   fast_dev_run: False
   max_epochs: 720
