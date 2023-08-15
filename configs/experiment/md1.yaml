@@ -21,14 +21,14 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/train
-      parsed_data: ${paths.data_dir}/train.npz
+      raw_data: ${paths.data_dir}/train  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/train.npz
     validation:
-      raw_data: ${paths.data_dir}/val
-      parsed_data: ${paths.data_dir}/val.npz
+      raw_data: ${paths.data_dir}/val  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/val.npz
     test:
-      raw_data: ${paths.data_dir}/val
-      parsed_data: ${paths.data_dir}/test.npz
+      raw_data: ${paths.data_dir}/val  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/parsed_data/test.npz
 model:
   _target_: src.models.captcha_module.CaptchaModule
   optimizer:
