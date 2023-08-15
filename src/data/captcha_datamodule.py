@@ -34,7 +34,6 @@ class CaptchaDataModule(LightningDataModule):
 
     def prepare_data(self) -> None:
         # 使用 CaptchaTrainLoader 處理圖像並保存到 NPZ 文件
-        print("Processing images...")
         if not os.path.exists(self.hparams.dataset.train.parsed_data):
             DataPaser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
         if not os.path.exists(self.hparams.dataset.validation.parsed_data):

@@ -4,6 +4,7 @@ import glob
 
 import autorootcwd  # noqa: F401
 import numpy as np
+from tqdm import tqdm
 import torch
 from PIL import Image
 from torch.utils.data import Dataset
@@ -29,21 +30,25 @@ class DataPaser:
         labels = []
         if file_path.endswith("zip"):
             with zipfile.ZipFile(file_path, 'r') as zipf:
-                for file_name in zipf.namelist():
-                    if file_name.endswith('.png') or file_name.endswith('.jpg'):
-                        with zipf.open(file_name) as file:
-                            image, label = self.__process_image(file, file_name)
-                            if image is not None:
-                                processed_images.append(image)
-                                labels.append(label)
+                with tqdm(zipf.namelist(), desc="Processing ZIP") as pbar: # 使用 pbar 為進度條變量
+                    for file_name in pbar:
+                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            with zipf.open(file_name) as file:
+                                image, label = self.__process_image(file, file_name)
+                                if image is not None:
+                                    processed_images.append(image)
+                                    labels.append(label)
+                                    pbar.set_postfix({"Current label": label}) # 更新進度條的描述
         else:
             image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
-            for image_path in image_paths:
-                with open(f"{file_path}/{image_path}", 'rb') as file:
-                    image, label = self.__process_image(file, f"{file_path}/{image_path}")
-                    if image is not None:
-                        processed_images.append(image)
-                        labels.append(label)
+            with tqdm(image_paths, desc="Processing images") as pbar: # 使用 pbar 為進度條變量
+                for image_path in pbar:
+                    with open(f"{file_path}/{image_path}", 'rb') as file:
+                        image, label = self.__process_image(file, f"{file_path}/{image_path}")
+                        if image is not None:
+                            processed_images.append(image)
+                            labels.append(label)
+                            pbar.set_postfix({"Current label": label}) # 更新進度條的描述
 
         np.savez(save_path, images=processed_images, labels=labels)
         return processed_images, labels
