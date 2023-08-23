@@ -100,49 +100,39 @@ class CaptchaModule(LightningModule):
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         images, labels_encoded = batch
 
-        logits = self.forward(images)
-        labels_one_hot = F.one_hot(labels_encoded, num_classes=36).float()
-        logits = logits.view(-1, 5, 36)
+        prediction = self.forward(images)
 
-        # 計算原始損失
-        original_loss = self.loss_fns(logits, labels_one_hot)
-        preds = torch.argmax(logits, dim=2)
-
-        # 計算是否錯誤
-        correctness = torch.all(preds == labels_encoded, dim=1) # 比較預測與實際驗證碼
-        correctness_loss = 1.0 - torch.mean(correctness.float()) # 計算錯誤的平均數
-
-        # 計算正確獎勵
-        correctness_reward_loss = torch.mean(correctness.float())
-
-        # 計算總損失
-        total_loss = 0.3 * original_loss - 0.7 * correctness_reward_loss
-
-        return total_loss, original_loss, correctness_loss, correctness_reward_loss, preds, labels_one_hot, images
+        losses = {}  # a dict of {loss_fn_name: loss_value}
+        losses["total_loss"] = 0.0
+        for loss_fn in self.loss_fns:
+            losses[loss_fn.tag] = loss_fn(prediction=prediction, images=images, labels_encoded=labels_encoded)
+            losses["total_loss"] += losses[loss_fn.tag] * loss_fn.weight
+        return losses, prediction, images, labels_encoded
 
     def training_step(
         self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
     ) -> torch.Tensor:
-        total_loss, original_loss, correctness_loss, correctness_reward_loss, preds, labels_one_hot, images = self.model_step(batch)
-        self.train_loss(total_loss)
-        self.log('train/original_loss', original_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/correctness_loss', correctness_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/correctness_reward_loss', correctness_reward_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/total_loss', total_loss, on_step=False, on_epoch=True, prog_bar=True)
-        return total_loss
+        losses, prediction, images, labels_encoded = self.model_step(batch)
+        self.train_loss(losses.get("total_loss"))
+        self.log('train/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('train/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('train/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('train/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        return losses.get("total_loss")
 
     def on_train_epoch_end(self) -> None:
         """Lightning hook that is called when a training epoch ends."""
         pass
 
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        total_loss, original_loss, correctness_loss, correctness_reward_loss, preds, labels_one_hot, images = self.model_step(batch)
-        self.val_loss(total_loss)
-        self.log('val/original_loss', original_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/correctness_loss', correctness_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/correctness_reward_loss', correctness_reward_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/total_loss', total_loss, on_step=False, on_epoch=True, prog_bar=True)
+        losses, prediction, images, labels_encoded = self.model_step(batch)
+        self.val_loss(losses.get("total_loss"))
+        self.log('val/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('val/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('val/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('val/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
         if batch_idx % 100 == 0:
+            labels_one_hot = F.one_hot(labels_encoded, num_classes=36).float()
             fig = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_one_hot)
             self.logger.experiment.add_figure('Predicted Images', fig, self.global_step)
 
@@ -150,12 +140,12 @@ class CaptchaModule(LightningModule):
         pass
 
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        total_loss, original_loss, correctness_loss, correctness_reward_loss, preds, labels_one_hot, images = self.model_step(batch)
-        self.test_loss(total_loss)
-        self.log('test/original_loss', original_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/correctness_loss', correctness_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/correctness_reward_loss', correctness_reward_loss, on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/total_loss', total_loss, on_step=False, on_epoch=True, prog_bar=True)
+        losses, prediction, images, labels_encoded = self.model_step(batch)
+        self.test_loss(losses.get("total_loss"))
+        self.log('test/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('test/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('test/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        self.log('test/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
 
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
