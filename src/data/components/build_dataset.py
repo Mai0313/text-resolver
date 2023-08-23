@@ -48,35 +48,47 @@ class DataParser:
         """
         processed_images = []
         labels = []
-        if file_path.endswith("zip"):
-            with zipfile.ZipFile(file_path, 'r') as zipf:
-                for file_name in zipf.namelist():
-                    if file_name.endswith('.png') or file_name.endswith('.jpg'):
-                        with zipf.open(file_name) as file:
-                            image, label = self.__process_image(file, file_name)
-                            if image is not None:
-                                processed_images.append(image)
-                                labels.append(label)
-        elif file_path.endswith("tar.gz"):
-            with tarfile.open(file_path, 'r:gz') as tarf:
-                for file_name in tarf.getnames():
-                    if file_name.endswith('.png') or file_name.endswith('.jpg'):
-                        with tarf.extractfile(file_name) as file:
-                            image, label = self.__process_image(file, file_name)
-                            if image is not None:
-                                processed_images.append(image)
-                                labels.append(label)
-        else:
-            image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
-            for image_path in image_paths:
-                with open(f"{file_path}/{image_path}", 'rb') as file:
-                    image, label = self.__process_image(file, f"{file_path}/{image_path}")
-                    if image is not None:
-                        processed_images.append(image)
-                        labels.append(label)
+        with Progress() as progress:
+            if file_path.endswith("zip"):
+                with zipfile.ZipFile(file_path, 'r') as zipf:
+                    total_files = sum(1 for file_name in zipf.namelist() if file_name.endswith('.png') or file_name.endswith('.jpg'))
+                    task_zip = progress.add_task("[red]Processing ZIP...", total=total_files)
+                    for file_name in zipf.namelist():
+                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            with zipf.open(file_name) as file:
+                                image, label = self.__process_image(file, file_name)
+                                if image is not None:
+                                    processed_images.append(image)
+                                    labels.append(label)
+                                    progress.update(task_zip, advance=1)
 
-        np.savez(save_path, images=processed_images, labels=labels)
-        return processed_images, labels
+            elif file_path.endswith("tar.gz"):
+                with tarfile.open(file_path, 'r:gz') as tarf:
+                    total_files = sum(1 for file_name in tarf.getnames() if file_name.endswith('.png') or file_name.endswith('.jpg'))
+                    task_tar = progress.add_task("[green]Processing TAR.GZ...", total=total_files)
+                    for file_name in tarf.getnames():
+                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            with tarf.extractfile(file_name) as file:
+                                image, label = self.__process_image(file, file_name)
+                                if image is not None:
+                                    processed_images.append(image)
+                                    labels.append(label)
+                                    progress.update(task_tar, advance=1)
+
+            else:
+                image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
+                total_files = len(image_paths)
+                task_folder = progress.add_task("[blue]Processing images...", total=total_files)
+                for image_path in image_paths:
+                    with open(f"{file_path}/{image_path}", 'rb') as file:
+                        image, label = self.__process_image(file, f"{file_path}/{image_path}")
+                        if image is not None:
+                            processed_images.append(image)
+                            labels.append(label)
+                            progress.update(task_folder, advance=1)
+
+            np.savez(save_path, images=processed_images, labels=labels)
+            return processed_images, labels
 
 
 class CaptchaDataset(Dataset):
