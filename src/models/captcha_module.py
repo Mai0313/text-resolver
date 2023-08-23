@@ -113,8 +113,8 @@ class CaptchaModule(LightningModule):
         correctness_loss = 1.0 - torch.mean(correctness.float()) # 計算錯誤的平均數
 
         # 計算正確獎勵
-        correctness_reward_loss = torch.mean(correctness.float()) 
-        
+        correctness_reward_loss = torch.mean(correctness.float())
+
         # 計算總損失
         total_loss = 0.3 * original_loss - 0.7 * correctness_reward_loss
 
