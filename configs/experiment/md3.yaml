@@ -52,7 +52,7 @@ callbacks:
     _target_: lightning.pytorch.callbacks.ModelCheckpoint
     dirpath: null
     filename: epoch_{epoch:03d}
-    monitor: "val/loss"
+    monitor: "val/total_loss"
     verbose: False
     save_last: True
     save_top_k: -1
@@ -64,7 +64,7 @@ callbacks:
     every_n_epochs: 20
     save_on_train_epoch_end: null
   early_stopping:
-    monitor: "val/loss"
+    monitor: "val/total_loss"
     patience: 100
     mode: min
 logger:
