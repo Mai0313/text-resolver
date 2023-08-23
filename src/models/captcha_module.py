@@ -114,10 +114,8 @@ class CaptchaModule(LightningModule):
     ) -> torch.Tensor:
         losses, prediction, images, labels_encoded = self.model_step(batch)
         self.train_loss(losses.get("total_loss"))
-        self.log('train/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('train/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        for loss_name, loss_value in losses.items():
+            self.log(f'train/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
         return losses.get("total_loss")
 
     def on_train_epoch_end(self) -> None:
@@ -127,13 +125,10 @@ class CaptchaModule(LightningModule):
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded = self.model_step(batch)
         self.val_loss(losses.get("total_loss"))
-        self.log('val/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('val/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        if batch_idx % 100 == 0:
-            labels_one_hot = F.one_hot(labels_encoded, num_classes=36).float()
-            fig = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_one_hot)
+        for loss_name, loss_value in losses.items():
+            self.log(f'val/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
+        fig = DataVisualizer(self.net, self.device).visualize_prediction(batch_idx, images, labels_encoded)
+        if fig:
             self.logger.experiment.add_figure('Predicted Images', fig, self.global_step)
 
     def on_validation_epoch_end(self) -> None:
@@ -142,10 +137,8 @@ class CaptchaModule(LightningModule):
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded = self.model_step(batch)
         self.test_loss(losses.get("total_loss"))
-        self.log('test/original_loss', losses.get("original_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/correctness_loss', losses.get("correctness_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/correctness_reward_loss', losses.get("correctness_reward_loss"), on_step=False, on_epoch=True, prog_bar=True)
-        self.log('test/total_loss', losses.get("total_loss"), on_step=False, on_epoch=True, prog_bar=True)
+        for loss_name, loss_value in losses.items():
+            self.log(f'test/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
