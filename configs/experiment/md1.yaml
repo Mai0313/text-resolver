@@ -46,15 +46,7 @@ model:
   net:
     _target_: src.models.components.cnn.CaptchaNet
   loss_fns:
-  - _target_: src.models.components.loss_fn.MSELoss
-    tag: original_loss
-    weight: 0.3
-  - _target_: src.models.components.loss_fn.CorrectnessLoss
-    tag: correctness_loss
-    weight: 0.95
-  - _target_: src.models.components.loss_fn.CorrectnessRewardLoss
-    tag: correctness_reward_loss
-    weight: 0.95
+    _target_: torch.nn.MSELoss
 callbacks:
   model_checkpoint:
     _target_: lightning.pytorch.callbacks.ModelCheckpoint
