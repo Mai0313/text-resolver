@@ -2,7 +2,6 @@ from typing import Any
 
 import torch
 from lightning import LightningModule
-from torch.nn import functional as F
 from torchmetrics import MaxMetric, MeanMetric
 from torchmetrics.classification.accuracy import Accuracy
 
@@ -127,8 +126,8 @@ class CaptchaModule(LightningModule):
         self.val_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
             self.log(f'val/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
-        fig = DataVisualizer(self.net, self.device).visualize_prediction(batch_idx, images, labels_encoded)
-        if fig:
+        if batch_idx % 100 == 0:
+            fig = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_encoded)
             self.logger.experiment.add_figure('Predicted Images', fig, self.global_step)
 
     def on_validation_epoch_end(self) -> None:
