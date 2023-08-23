@@ -13,7 +13,7 @@ class MSELoss:
         labels_one_hot = F.one_hot(labels_encoded, num_classes=36).float()
         logits = prediction.view(-1, 5, 36)
         original_loss = self.criterion(logits, labels_one_hot)
-        return original_loss.mean()
+        return original_loss.mean() * self.weight
 
 class CorrectnessLoss:
     def __init__(self, tag, weight):
@@ -26,7 +26,7 @@ class CorrectnessLoss:
         preds = torch.argmax(logits, dim=2)
         correctness = torch.all(preds == labels_encoded, dim=1)
         correctness_loss = 1.0 - torch.mean(correctness.float())
-        return correctness_loss
+        return correctness_loss * self.weight
 
 class CorrectnessRewardLoss:
     def __init__(self, tag, weight):
@@ -39,4 +39,4 @@ class CorrectnessRewardLoss:
         preds = torch.argmax(logits, dim=2)
         correctness = torch.all(preds == labels_encoded, dim=1)
         correctness_reward_loss = torch.mean(correctness.float())
-        return correctness_reward_loss
+        return correctness_reward_loss * self.weight
