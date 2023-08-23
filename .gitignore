@@ -143,6 +143,9 @@ dmypy.json
 *.h5
 *.tar
 *.tar.gz
+/data/test
+/data/train
+/data/val
 
 # Lightning-Hydra-Template
 configs/local/default.yaml
@@ -151,7 +154,3 @@ configs/local/default.yaml
 
 # Aim logging
 .aim
-/data/test
-/data/train
-/data/val
-!data/README.md
