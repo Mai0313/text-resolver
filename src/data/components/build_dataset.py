@@ -1,4 +1,5 @@
 import os
+import tarfile
 import zipfile
 import glob
 
@@ -49,10 +50,25 @@ class DataParser:
         labels = []
         if file_path.endswith("zip"):
             with zipfile.ZipFile(file_path, 'r') as zipf:
-                with tqdm(zipf.namelist(), desc="Processing ZIP") as pbar:
+                with tqdm(zipf.namelist(), desc="Processing ZIP", position=0, leave=False, ncols = 160, ascii="░▒█", colour='green', bar_format='{l_bar}{bar}{r_bar}') as pbar:
                     for file_name in pbar:
                         if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            pbar.set_postfix_str(f"File: {os.path.basename(file_name)}", refresh=True)
+                            pbar.update(1)
                             with zipf.open(file_name) as file:
+                                image, label = self.__process_image(file, file_name)
+                                if image is not None:
+                                    processed_images.append(image)
+                                    labels.append(label)
+                                    pbar.set_postfix({"Current label": label})
+        elif file_path.endswith("tar.gz"):
+            with tarfile.open(file_path, 'r:gz') as tarf:
+                with tqdm(tarf.getnames(), desc="Processing TAR.GZ", position=0, leave=False, ncols = 160, ascii="░▒█", colour='green', bar_format='{l_bar}{bar}{r_bar}') as pbar:
+                    for file_name in pbar:
+                        if file_name.endswith('.png') or file_name.endswith('.jpg'):
+                            pbar.set_postfix_str(f"File: {os.path.basename(file_name)}", refresh=True)
+                            pbar.update(1)
+                            with tarf.extractfile(file_name) as file:
                                 image, label = self.__process_image(file, file_name)
                                 if image is not None:
                                     processed_images.append(image)
@@ -60,9 +76,11 @@ class DataParser:
                                     pbar.set_postfix({"Current label": label})
         else:
             image_paths = [f for f in os.listdir(file_path) if f.endswith('.png') or f.endswith('.jpg')]
-            with tqdm(image_paths, desc="Processing images") as pbar:
+            with tqdm(image_paths, desc="Processing images", position=0, leave=False, ncols = 160, ascii="░▒█", colour='green', bar_format='{l_bar}{bar}{r_bar}') as pbar:
                 for image_path in pbar:
                     with open(f"{file_path}/{image_path}", 'rb') as file:
+                        pbar.set_postfix_str(f"File: {os.path.basename(image_path)}", refresh=True)
+                        pbar.update(1)
                         image, label = self.__process_image(file, f"{file_path}/{image_path}")
                         if image is not None:
                             processed_images.append(image)
