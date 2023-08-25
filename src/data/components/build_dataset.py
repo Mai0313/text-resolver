@@ -1,6 +1,7 @@
 import os
 import tarfile
 import zipfile
+import wget
 
 import autorootcwd  # noqa: F401
 import numpy as np
@@ -10,6 +11,14 @@ from PIL import Image
 from torch.utils.data import Dataset
 from src.utils.image_encoder import ImageEncoder
 from rich.progress import Progress
+
+class DataDownloader:
+    def __init__(self):
+        pass
+
+    def get_dataset(self, url: str, output_path: str) -> None:
+        os.makedirs(output_path, exist_ok=True)
+        wget.download(url, output_path)
 
 class DataParser:
     def __init__(self, expected_label_length=5):

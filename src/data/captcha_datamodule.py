@@ -8,7 +8,7 @@ from lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, random_split
 from torchvision.transforms import ToTensor
 
-from src.data.components.build_dataset import DataParser, CaptchaDataset
+from src.data.components.build_dataset import DataParser, CaptchaDataset, DataDownloader
 
 class CaptchaDataModule(LightningDataModule):
 
@@ -46,6 +46,15 @@ class CaptchaDataModule(LightningDataModule):
 
         Do not use it to assign state (self.x = y).
         """
+        # Download Datasets and place into the correct folders
+        if not os.path.exists(self.hparams.dataset.train.raw_data) or self.force_parse_data:
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/train.zip', "./data/train")
+        if not os.path.exists(self.hparams.dataset.validation.raw_data) or self.force_parse_data:
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/val.zip', "./data/val")
+        if not os.path.exists(self.hparams.dataset.test.raw_data) or self.force_parse_data:
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/test.zip', "./data/test")
+
+        # Parse the data
         if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
         if not os.path.exists(self.hparams.dataset.validation.parsed_data) or self.force_parse_data:
