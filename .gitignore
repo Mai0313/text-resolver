@@ -154,3 +154,4 @@ configs/local/default.yaml
 
 # Aim logging
 .aim
+/data
