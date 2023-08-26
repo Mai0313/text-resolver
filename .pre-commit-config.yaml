@@ -83,4 +83,4 @@ repos:
     rev: 1.7.0
     hooks:
       - id: nbqa-ruff
-        args: ["--config=.ruff.toml"]
+        args: ["--config=pyproject.toml"]

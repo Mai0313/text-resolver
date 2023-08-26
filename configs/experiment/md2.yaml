@@ -1,13 +1,5 @@
 # @package _global_
-defaults:
-  - override /data: mnist
-  - override /model: mnist
-  - override /callbacks: default
-  - override /trainer: default
-  - override /extras: default
-  - override /paths: default
-
-task_name: "captcha"
+task_name: captcha
 tags: ["dev"]
 train: True
 test: False
@@ -77,7 +69,7 @@ callbacks:
     every_n_train_steps: null
     train_time_interval: null
     every_n_epochs: 20
-    save_on_train_epoch_end: null
+    save_on_train_epoch_end: True
   early_stopping:
     monitor: "val/total_loss"
     patience: 100
@@ -106,8 +98,8 @@ trainer:
   logger: True
   callbacks: [checkpoint_callback]
   fast_dev_run: False
+  min_epochs: 1
   max_epochs: 720
-  min_epochs: null
   max_steps: -1
   min_steps: null
   max_time: null
@@ -126,7 +118,7 @@ trainer:
   accumulate_grad_batches: 1
   gradient_clip_val: null
   gradient_clip_algorithm: null
-  deterministic: null
+  deterministic: False
   benchmark: null
   inference_mode: True
   use_distributed_sampler: True

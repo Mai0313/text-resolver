@@ -1,0 +1,35 @@
+_target_: src.models.captcha_module.CaptchaModule
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.001
+  weight_decay: 0.0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 10
+
+net:
+  _target_: src.models.components.cnn.CaptchaNet
+  in_channels: 1
+  kernel_size: 3
+  stride: 1
+  padding: 1
+  num_classes: 36
+  num_chars: 5
+  hidden_size: 256
+
+loss_fns:
+- _target_: src.models.components.loss_fn.MSELoss
+  tag: original_loss
+  weight: 0.3
+- _target_: src.models.components.loss_fn.CorrectnessLoss
+  tag: correctness_loss
+  weight: 0.95
+- _target_: src.models.components.loss_fn.CorrectnessRewardLoss
+  tag: correctness_reward_loss
+  weight: 0.95
