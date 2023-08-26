@@ -2,13 +2,13 @@ from torch import nn
 
 
 class CaptchaNet(nn.Module):
-    def __init__(self, 
-                 in_channels: int = 1, 
+    def __init__(self,
+                 in_channels: int = 1,
                  kernel_size: int = 3,
                  stride: int = 1,
                  padding: int = 1,
-                 num_classes: int = 36, 
-                 num_chars: int = 5, 
+                 num_classes: int = 36,
+                 num_chars: int = 5,
                  hidden_size: int = 256
                  ):
         super().__init__()
