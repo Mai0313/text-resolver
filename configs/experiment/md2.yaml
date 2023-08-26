@@ -45,15 +45,15 @@ model:
     num_chars: 5
     hidden_size: 256
   loss_fns:
-  - _target_: src.models.components.loss_fn.MSELoss
+  - _target_: src.models.components.loss_fn.CrossEntropyLoss
     tag: original_loss
     weight: 0.3
   - _target_: src.models.components.loss_fn.CorrectnessLoss
     tag: correctness_loss
-    weight: 0.95
+    weight: 0.5
   - _target_: src.models.components.loss_fn.CorrectnessRewardLoss
     tag: correctness_reward_loss
-    weight: 0.95
+    weight: 0.2
 callbacks:
   model_checkpoint:
     _target_: lightning.pytorch.callbacks.ModelCheckpoint
@@ -71,7 +71,7 @@ callbacks:
     every_n_epochs: 20
     save_on_train_epoch_end: True
   early_stopping:
-    monitor: "train/correctness_loss"
+    monitor: "train/total_loss"
     patience: 100
     mode: min
 logger:
