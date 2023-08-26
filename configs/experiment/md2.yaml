@@ -45,6 +45,13 @@ model:
     patience: 10
   net:
     _target_: src.models.components.cnn.CaptchaNet
+    in_channels: 1
+    kernel_size: 3
+    stride: 1
+    padding: 1
+    num_classes: 36
+    num_chars: 5
+    hidden_size: 256
   loss_fns:
   - _target_: src.models.components.loss_fn.MSELoss
     tag: original_loss
