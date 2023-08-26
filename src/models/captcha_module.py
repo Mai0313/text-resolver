@@ -128,7 +128,7 @@ class CaptchaModule(LightningModule):
             self.log(f'val/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
         if batch_idx % 100 == 0:
             fig = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_encoded)
-            self.logger.experiment.add_figure('Predicted Images', fig, self.global_step)
+            self.logger.experiment.add_figure('Predicted_Images', fig, self.global_step)
 
     def on_validation_epoch_end(self) -> None:
         pass
