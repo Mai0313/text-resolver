@@ -71,7 +71,7 @@ callbacks:
     every_n_epochs: 20
     save_on_train_epoch_end: True
   early_stopping:
-    monitor: "train/total_loss"
+    monitor: "val/accuracy"
     patience: 100
     mode: min
 logger:
@@ -98,7 +98,7 @@ trainer:
   logger: True
   callbacks: [checkpoint_callback]
   fast_dev_run: False
-  min_epochs: 360
+  min_epochs: 10
   max_epochs: 720
   max_steps: -1
   min_steps: null
