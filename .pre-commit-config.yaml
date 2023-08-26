@@ -13,7 +13,7 @@ repos:
             [
               "--no-cache",
               "--config",
-              ".ruff.toml",
+              "pyproject.toml",
               "--fix",
             ]
 
