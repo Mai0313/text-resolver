@@ -1,13 +1,5 @@
 # @package _global_
-defaults:
-  - override /data: mnist
-  - override /model: mnist
-  - override /callbacks: default
-  - override /trainer: default
-  - override /extras: default
-  - override /paths: default
-
-task_name: "captcha"
+task_name: "captcha_swin"
 tags: ["dev"]
 train: True
 test: False
@@ -45,6 +37,23 @@ model:
     patience: 10
   net:
     _target_: src.models.components.swin.SwinTransformerV2
+    img_size: [60, 20]
+    patch_size: 4
+    in_chans: 1
+    num_classes: 1000
+    embed_dim: 96
+    depths: [4, 4, 4, 4]
+    num_heads: [4, 4, 4, 4]
+    window_size: 4
+    mlp_ratio: 4.
+    qkv_bias: True
+    drop_rate: 0.
+    attn_drop_rate: 0.
+    drop_path_rate: 0.1
+    ape: False
+    patch_norm: True
+    use_checkpoint: False
+    pretrained_window_sizes: [0, 0, 0, 0]
   loss_fns:
   - _target_: src.models.components.loss_fn.MSELoss
     tag: original_loss
