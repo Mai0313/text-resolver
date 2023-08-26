@@ -19,7 +19,7 @@ task-tags = ["TODO"]
 target-version = "py39"
 
 # Set the cache directory to `logs/ruff_cache`.
-cache-dir = "logs/ruff_cache"
+# cache-dir = "logs/ruff_cache"  # default: ".ruff_cache", now it is not allowed to create cache dir in logs
 
 # Group violations by containing file.
 # This is output message format; nothing about coding
