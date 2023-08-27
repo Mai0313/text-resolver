@@ -13,14 +13,14 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/train/train.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/train/train.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/train/train.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/train/train.npz
     validation:
-      raw_data: ${paths.data_dir}/val/val.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/val/val.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/val/val.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/val/val.npz
     test:
-      raw_data: ${paths.data_dir}/test/test.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/test/test.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/test/test.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/test/test.npz
   force_parse_data: False
 model:
   _target_: src.models.captcha_module.CaptchaModule
@@ -36,7 +36,7 @@ model:
     factor: 0.1
     patience: 10
   net:
-    _target_: src.models.components.cnn.CaptchaNet
+    _target_: src.models.components.transformer.CaptchaNet
     in_channels: 1
     kernel_size: 3
     stride: 1
