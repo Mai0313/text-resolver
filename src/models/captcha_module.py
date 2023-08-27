@@ -113,11 +113,6 @@ class CaptchaModule(LightningModule):
     ) -> torch.Tensor:
         losses, prediction, images, labels_encoded = self.model_step(batch)
 
-        logits = prediction.view(-1, 5, 36)
-        preds = torch.argmax(logits, dim=2)
-        self.train_acc(preds, labels_encoded)
-        self.log('train/accuracy', self.train_acc, on_step=False, on_epoch=True, prog_bar=True)
-
         self.train_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
             self.log(f'train/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
@@ -129,11 +124,6 @@ class CaptchaModule(LightningModule):
 
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded = self.model_step(batch)
-
-        logits = prediction.view(-1, 5, 36)
-        preds = torch.argmax(logits, dim=2)
-        self.test_acc(preds, labels_encoded)
-        self.log('val/accuracy', self.test_acc, on_step=False, on_epoch=True, prog_bar=True)
 
         self.val_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
@@ -147,11 +137,6 @@ class CaptchaModule(LightningModule):
 
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded = self.model_step(batch)
-
-        logits = prediction.view(-1, 5, 36)
-        preds = torch.argmax(logits, dim=2)
-        self.val_acc(preds, labels_encoded)
-        self.log('test/accuracy', self.val_acc, on_step=False, on_epoch=True, prog_bar=True)
 
         self.test_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
