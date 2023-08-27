@@ -1,3 +1,5 @@
+import datetime
+
 from typing import Any, Dict, Optional, Tuple
 import torch
 import glob
@@ -47,12 +49,15 @@ class CaptchaDataModule(LightningDataModule):
         Do not use it to assign state (self.x = y).
         """
         # Download Datasets and place into the correct folders
+        today = datetime.datetime.now()
+        today = today.strftime("%Y%m%d")
+        os.makedirs(f"./data/{today}_captcha", exist_ok=True)
         if not os.path.exists(self.hparams.dataset.train.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/train.zip', "./data/train")
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/train.zip', f"./data/{today}_captcha/train")
         if not os.path.exists(self.hparams.dataset.validation.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/val.zip', "./data/val")
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/val.zip', f"./data/{today}_captcha/val")
         if not os.path.exists(self.hparams.dataset.test.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/test.zip', "./data/test")
+            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/test.zip', f"./data/{today}_captcha/test")
 
         # Parse the data
         if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
