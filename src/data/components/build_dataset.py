@@ -25,7 +25,7 @@ class DataParser:
         """Initialize the data parser with the expected length of the label."""
         self.expected_label_length = expected_label_length
 
-    def __process_image(self, file, file_name):
+    def convert_image(self, file, file_name):
         """Process a single image by normalizing and resizing.
 
         Args:
@@ -65,7 +65,7 @@ class DataParser:
                     for file_name in zipf.namelist():
                         if file_name.endswith('.png') or file_name.endswith('.jpg'):
                             with zipf.open(file_name) as file:
-                                image, label = self.__process_image(file, file_name)
+                                image, label = self.convert_image(file, file_name)
                                 if image is not None:
                                     processed_images.append(image)
                                     labels.append(label)
@@ -78,7 +78,7 @@ class DataParser:
                     for file_name in tarf.getnames():
                         if file_name.endswith('.png') or file_name.endswith('.jpg'):
                             with tarf.extractfile(file_name) as file:
-                                image, label = self.__process_image(file, file_name)
+                                image, label = self.convert_image(file, file_name)
                                 if image is not None:
                                     processed_images.append(image)
                                     labels.append(label)
@@ -90,7 +90,7 @@ class DataParser:
                 task_folder = progress.add_task("[blue]Processing images...", total=total_files)
                 for image_path in image_paths:
                     with open(f"{file_path}/{image_path}", 'rb') as file:
-                        image, label = self.__process_image(file, f"{file_path}/{image_path}")
+                        image, label = self.convert_image(file, f"{file_path}/{image_path}")
                         if image is not None:
                             processed_images.append(image)
                             labels.append(label)
