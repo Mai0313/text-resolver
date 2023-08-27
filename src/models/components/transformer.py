@@ -1,5 +1,5 @@
-import torch
 import torch.nn as nn
+
 
 class TransformerBlock(nn.Module):
     def __init__(self, d_model, nhead, dim_feedforward):
