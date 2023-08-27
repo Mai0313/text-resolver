@@ -47,13 +47,13 @@ model:
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss
     tag: original_loss
-    weight: 0.05
+    weight: 0.7
   - _target_: src.models.components.loss_fn.CorrectnessLoss
     tag: correctness_loss
-    weight: 0.9
+    weight: 0.2
   - _target_: src.models.components.loss_fn.CorrectnessRewardLoss
     tag: correctness_reward_loss
-    weight: 0.05
+    weight: 0.1
   # - _target_: src.models.components.loss_fn.AccuracyLoss
   #   tag: accuracy_loss
   #   weight: 1
