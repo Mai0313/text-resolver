@@ -39,7 +39,7 @@ model:
     _target_: src.models.components.unet.CaptchaUNet
     in_channels: 1
     kernel_size: 2
-    stride: 2
+    stride: 1
     num_classes: 36
     num_chars: 5
   loss_fns:
