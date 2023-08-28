@@ -118,7 +118,7 @@ trainer:
   enable_checkpointing: null
   enable_progress_bar: True
   enable_model_summary: null
-  accumulate_grad_batches: 2
+  accumulate_grad_batches: 1
   gradient_clip_val: null
   gradient_clip_algorithm: null
   deterministic: False

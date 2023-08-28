@@ -1,5 +1,5 @@
 # @package _global_
-task_name: captcha
+task_name: captcha_cnn
 tags: ["dev"]
 train: True
 test: False
@@ -13,14 +13,14 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/train/train.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/train/train.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/train/train.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/train/train.npz
     validation:
-      raw_data: ${paths.data_dir}/val/val.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/val/val.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/val/val.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/val/val.npz
     test:
-      raw_data: ${paths.data_dir}/test/test.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/test/test.npz
+      raw_data: ${paths.data_dir}/20230827_captcha/test/test.zip  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/20230827_captcha/test/test.npz
   force_parse_data: False
 model:
   _target_: src.models.captcha_module.CaptchaModule
@@ -47,13 +47,13 @@ model:
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss
     tag: original_loss
-    weight: 0.3
+    weight: 0.7
   - _target_: src.models.components.loss_fn.CorrectnessLoss
     tag: correctness_loss
-    weight: 0.5
+    weight: 0.2
   - _target_: src.models.components.loss_fn.CorrectnessRewardLoss
     tag: correctness_reward_loss
-    weight: 0.2
+    weight: 0.1
   # - _target_: src.models.components.loss_fn.AccuracyLoss
   #   tag: accuracy_loss
   #   weight: 1
