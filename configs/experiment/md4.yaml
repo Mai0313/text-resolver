@@ -1,5 +1,5 @@
 # @package _global_
-task_name: captcha_more_datasets
+task_name: captcha_transformer
 tags: ["dev"]
 train: True
 test: False
