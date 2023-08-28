@@ -2,6 +2,7 @@ import os
 import tarfile
 import zipfile
 import wget
+from pathlib import Path
 
 import autorootcwd  # noqa: F401
 import numpy as np
@@ -17,7 +18,8 @@ class DataDownloader:
         pass
 
     def get_dataset(self, url: str, output_path: str) -> None:
-        os.makedirs(output_path, exist_ok=True)
+        path = Path(output_path)
+        os.makedirs(path.parent.absolute(), exist_ok=True)
         wget.download(url, output_path)
 
 class DataParser:
