@@ -12,6 +12,23 @@ class DataVisualizer:
         self.model = model
         self.device = device
 
+    def get_accuracy(self, images, labels):
+        labels_one_hot = F.one_hot(labels, num_classes=36).float()
+        correct_count = 0
+        total_count = 0
+        for i in range(len(images)):
+            test_image = images[i].cpu().numpy().squeeze()
+            test_label = ImageEncoder().decode_output(labels_one_hot[i])
+            test_image_tensor = torch.tensor(test_image, dtype=torch.float32).unsqueeze(0).unsqueeze(0).to(self.device)
+            with torch.no_grad():
+                output = self.model(test_image_tensor)
+                pred_label = ImageEncoder().decode_output(output.squeeze())
+            if pred_label == test_label:
+                correct_count += 1
+            total_count += 1
+        return correct_count, total_count
+
+
     def visualize_prediction(self, images, labels):
         """Visualize the prediction of the model."""
         labels_one_hot = F.one_hot(labels, num_classes=36).float()
