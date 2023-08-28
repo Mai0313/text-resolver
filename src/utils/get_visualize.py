@@ -34,6 +34,9 @@ class DataVisualizer:
         labels_one_hot = F.one_hot(labels, num_classes=36).float()
         indices = np.random.choice(len(images), 10, replace=False)  # noqa: NPY002
 
+        correct_count = 0
+        total_count = 0
+
         fig, axs = plt.subplots(5, 2, figsize=(10, 25))
         for i, index in enumerate(indices):
             test_image = images[index].cpu().numpy().squeeze()  # 轉換為numpy array
@@ -43,6 +46,9 @@ class DataVisualizer:
             with torch.no_grad():
                 output = self.model(test_image_tensor)
                 pred_label = ImageEncoder().decode_output(output.squeeze())
+            if pred_label == test_label:
+                correct_count += 1
+            total_count += 1
 
             row = i // 2
             col = i % 2
@@ -51,4 +57,5 @@ class DataVisualizer:
             axs[row, col].set_title(f'Predicted: {pred_label}\nTrue: {test_label}')
             axs[row, col].axis('off')
 
-        return fig
+        accuracy = correct_count / total_count * 100
+        return fig, accuracy
