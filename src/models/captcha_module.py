@@ -6,7 +6,6 @@ from torchmetrics import MaxMetric, MeanMetric
 from torchmetrics.classification.accuracy import Accuracy
 
 from src.utils.get_visualize import DataVisualizer
-from src.utils.image_encoder import ImageEncoder
 
 
 class CaptchaModule(LightningModule):
@@ -133,11 +132,11 @@ class CaptchaModule(LightningModule):
         self.val_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
             self.log(f'val/{loss_name}', loss_value, on_step=False, on_epoch=True, prog_bar=True)
-        if batch_idx % 1 == 0:
+        if batch_idx % 100 == 0:
             fig, accuracy = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_encoded)
             self.logger.experiment.add_figure('Predicted_Images', fig, self.global_step)
             self.logger.experiment.add_scalar('Accuracy', accuracy, self.global_step)
-            self.log(f'val/Accuracy', accuracy, on_step=False, on_epoch=True, prog_bar=True)
+            self.log('val/Accuracy', accuracy, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_validation_epoch_end(self) -> None:
         pass
@@ -145,16 +144,7 @@ class CaptchaModule(LightningModule):
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded = self.model_step(batch)
 
-        for i in range(len(images)):
-            single_prediction = prediction[i]
-            single_label_encoded = labels_encoded[i]
-
-            with torch.no_grad():
-                pred_label = ImageEncoder().decode_output(single_prediction.squeeze())
-                true_label = ImageEncoder().decode_output(single_label_encoded.squeeze())
-            if pred_label == true_label:
-                self.correct_count += 1
-            self.total_count += 1
+        self.correct_count, self.total_count = DataVisualizer(self.net, self.device).get_accuracy(images, labels_encoded)
 
         self.test_loss(losses.get("total_loss"))
         for loss_name, loss_value in losses.items():
