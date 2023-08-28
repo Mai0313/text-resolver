@@ -2,7 +2,7 @@
 task_name: captcha_cnn
 tags: ["dev"]
 train: True
-test: False
+test: True
 compile: False
 ckpt_path: null
 seed: null
