@@ -1,5 +1,5 @@
 # @package _global_
-task_name: captcha_cnn
+task_name: captcha_RNN
 tags: ["dev"]
 train: True
 test: True
@@ -36,7 +36,7 @@ model:
     factor: 0.1
     patience: 10
   net:
-    _target_: src.models.components.cnn.CaptchaNet
+    _target_: src.models.components.rnn.CaptchaRNN
     in_channels: 1
     kernel_size: 3
     stride: 1
