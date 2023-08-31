@@ -10,7 +10,7 @@ defaults:
 task_name: "captcha"
 tags: ["dev"]
 train: True
-test: False
+test: True
 compile: False
 ckpt_path: null
 seed: null
