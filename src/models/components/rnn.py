@@ -1,5 +1,6 @@
-import torch.nn as nn
 import torch
+import torch.nn as nn
+
 
 class CaptchaRNN(nn.Module):
     def __init__(self,
@@ -9,7 +10,7 @@ class CaptchaRNN(nn.Module):
                  hidden_size: int = 256,
                  rnn_type: str = 'LSTM',
                  num_layers: int = 1):
-        super(CaptchaRNN, self).__init__()
+        super().__init__()
 
         # CNN feature extractor
         self.feature_extractor = nn.Sequential(
