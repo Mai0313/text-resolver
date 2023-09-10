@@ -3,7 +3,6 @@ task_name: captcha_RNN
 tags: ["dev"]
 train: True
 test: True
-compile: False
 ckpt_path: null
 seed: null
 data:
@@ -43,6 +42,7 @@ model:
     hidden_size: 256
     rnn_type: LSTM
     num_layers: 1
+  compile: false
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss
     tag: original_loss

@@ -3,7 +3,6 @@ task_name: captcha_transformer
 tags: ["dev"]
 train: True
 test: True
-compile: False
 ckpt_path: null
 seed: null
 data:
@@ -44,6 +43,7 @@ model:
     num_classes: 36
     num_chars: 5
     hidden_size: 256
+  compile: false
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss
     tag: original_loss

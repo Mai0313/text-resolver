@@ -47,6 +47,7 @@ class CaptchaModule(LightningModule):
         optimizer: torch.optim.Optimizer,
         loss_fns: list[torch.nn.Module],
         scheduler: torch.optim.lr_scheduler,
+        compile: bool = False,
     ) -> None:
         """Initialize a `MNISTLitModule`.
 
@@ -154,6 +155,18 @@ class CaptchaModule(LightningModule):
         """Lightning hook that is called when a test epoch ends."""
         accuracy = self.correct_count / self.total_count * 100
         self.log('Test Dataset Accuracy', accuracy)
+
+    def setup(self, stage: str) -> None:
+        """Lightning hook that is called at the beginning of fit (train + validate), validate,
+        test, or predict.
+
+        This is a good hook when you need to build models dynamically or adjust something about
+        them. This hook is called on every process when using DDP.
+
+        :param stage: Either `"fit"`, `"validate"`, `"test"`, or `"predict"`.
+        """
+        if self.hparams.compile and stage == "fit":
+            self.net = torch.compile(self.net)
 
     def configure_optimizers(self) -> dict[str, Any]:
         """Configures optimizers and learning-rate schedulers to be used for training.
