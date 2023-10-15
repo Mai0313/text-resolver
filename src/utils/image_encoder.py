@@ -14,7 +14,7 @@ class ImageEncoder:
                 if char.isdigit():
                     encoded_label.append(int(char))
                 else:
-                    encoded_label.append(ord(char) - ord('A') + 10)
+                    encoded_label.append(ord(char) - ord("A") + 10)
             encoded_labels.append(torch.tensor(encoded_label))
         return torch.stack(encoded_labels)
 
@@ -25,5 +25,5 @@ class ImageEncoder:
             if char_idx < 10:
                 decoded_label.append(str(char_idx))
             else:
-                decoded_label.append(chr(char_idx - 10 + ord('A')))
-        return ''.join(decoded_label)
+                decoded_label.append(chr(char_idx - 10 + ord("A")))
+        return "".join(decoded_label)

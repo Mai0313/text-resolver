@@ -12,8 +12,8 @@ from torchvision.transforms import ToTensor
 
 from src.data.components.build_dataset import DataParser, CaptchaDataset, DataDownloader
 
-class CaptchaDataModule(LightningDataModule):
 
+class CaptchaDataModule(LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data",
@@ -51,17 +51,25 @@ class CaptchaDataModule(LightningDataModule):
         # Download Datasets and place into the correct folders
         # os.makedirs(self.hparams.dataset.train.raw_data, exist_ok=True)
         if not os.path.exists(self.hparams.dataset.train.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/train.zip', self.hparams.dataset.train.raw_data)
+            DataDownloader().get_dataset(
+                "http://mai0313.com/share/Datasets/train.zip", self.hparams.dataset.train.raw_data
+            )
         if not os.path.exists(self.hparams.dataset.validation.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/val.zip', self.hparams.dataset.validation.raw_data)
+            DataDownloader().get_dataset(
+                "http://mai0313.com/share/Datasets/val.zip", self.hparams.dataset.validation.raw_data
+            )
         if not os.path.exists(self.hparams.dataset.test.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset('http://mai0313.com/share/Datasets/test.zip', self.hparams.dataset.test.raw_data)
+            DataDownloader().get_dataset(
+                "http://mai0313.com/share/Datasets/test.zip", self.hparams.dataset.test.raw_data
+            )
 
         # Parse the data
         if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.train.raw_data, self.hparams.dataset.train.parsed_data)
         if not os.path.exists(self.hparams.dataset.validation.parsed_data) or self.force_parse_data:
-            DataParser().process_images(self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data)
+            DataParser().process_images(
+                self.hparams.dataset.validation.raw_data, self.hparams.dataset.validation.parsed_data
+            )
         if not os.path.exists(self.hparams.dataset.test.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
 
@@ -147,6 +155,7 @@ class CaptchaDataModule(LightningDataModule):
         :param state_dict: The datamodule state returned by `self.state_dict()`.
         """
         pass
+
 
 if __name__ == "__main__":
     _ = CaptchaDataModule()

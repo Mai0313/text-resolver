@@ -2,15 +2,16 @@ from torch import nn
 
 
 class CaptchaNet(nn.Module):
-    def __init__(self,
-                 in_channels: int = 1,
-                 kernel_size: int = 3,
-                 stride: int = 1,
-                 padding: int = 1,
-                 num_classes: int = 36,
-                 num_chars: int = 5,
-                 hidden_size: int = 256
-                 ):
+    def __init__(
+        self,
+        in_channels: int = 1,
+        kernel_size: int = 3,
+        stride: int = 1,
+        padding: int = 1,
+        num_classes: int = 36,
+        num_chars: int = 5,
+        hidden_size: int = 256,
+    ):
         super().__init__()
 
         self.feature_extractor = nn.Sequential(
@@ -33,7 +34,7 @@ class CaptchaNet(nn.Module):
             nn.ReLU(),
             nn.Linear(hidden_size * 2, hidden_size),
             nn.ReLU(),
-            nn.Linear(hidden_size, num_chars * num_classes)
+            nn.Linear(hidden_size, num_chars * num_classes),
         )
 
         self.num_chars = num_chars
@@ -45,6 +46,7 @@ class CaptchaNet(nn.Module):
         x = self.classifier(x)
         x = x.view(-1, self.num_chars, self.num_classes)
         return x
+
 
 if __name__ == "__main__":
     _ = CaptchaNet()

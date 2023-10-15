@@ -2,15 +2,16 @@ import torch.nn as nn
 
 
 class CaptchaUNet(nn.Module):
-    def __init__(self,
-                 in_channels: int = 1,
-                 kernel_size: int = 3,
-                 stride: int = 1,
-                 padding: int = 1,
-                 num_classes: int = 36,
-                 num_chars: int = 5,
-                 hidden_size: int = 256
-                 ):
+    def __init__(
+        self,
+        in_channels: int = 1,
+        kernel_size: int = 3,
+        stride: int = 1,
+        padding: int = 1,
+        num_classes: int = 36,
+        num_chars: int = 5,
+        hidden_size: int = 256,
+    ):
         super().__init__()
 
         # Encoder (Downsampling path)
@@ -24,7 +25,7 @@ class CaptchaUNet(nn.Module):
         self.classifier = nn.Sequential(
             nn.Linear(0, hidden_size),  # Input dimension will be set dynamically
             nn.ReLU(),
-            nn.Linear(hidden_size, num_chars * num_classes)
+            nn.Linear(hidden_size, num_chars * num_classes),
         )
 
         self.num_chars = num_chars
@@ -32,9 +33,7 @@ class CaptchaUNet(nn.Module):
 
     def conv_block(self, in_channels, out_channels, kernel_size, stride, padding):
         return nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2)
+            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding), nn.ReLU(), nn.MaxPool2d(2, 2)
         )
 
     def forward(self, x):

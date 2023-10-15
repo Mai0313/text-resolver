@@ -13,6 +13,7 @@ from torch.utils.data import Dataset
 from src.utils.image_encoder import ImageEncoder
 from rich.progress import Progress
 
+
 class DataDownloader:
     def __init__(self):
         pass
@@ -21,6 +22,7 @@ class DataDownloader:
         path = Path(output_path)
         os.makedirs(path.parent.absolute(), exist_ok=True)
         wget.download(url, output_path)
+
 
 class DataParser:
     def __init__(self, expected_label_length=5):
@@ -37,7 +39,7 @@ class DataParser:
         Returns:
             Tuple of processed image and corresponding label.
         """
-        image = Image.open(file).convert('L')
+        image = Image.open(file).convert("L")
         label = os.path.splitext(os.path.basename(file_name))[0]
         if len(label) != self.expected_label_length:
             return None, None
@@ -59,11 +61,11 @@ class DataParser:
         """
         processed_images = []
         labels = []
-        file_types = ['.png', '.jpg']
+        file_types = [".png", ".jpg"]
 
         with Progress() as progress:
             if file_path.endswith("zip"):
-                with zipfile.ZipFile(file_path, 'r') as zipf:
+                with zipfile.ZipFile(file_path, "r") as zipf:
                     all_files = zipf.namelist()
                     image_files = [f for f in all_files if any(f.endswith(ft) for ft in file_types)]
                     task = progress.add_task("[red]Processing ZIP...", total=len(image_files))
@@ -77,7 +79,7 @@ class DataParser:
                                 progress.update(task, advance=1)
 
             elif file_path.endswith("tar.gz"):
-                with tarfile.open(file_path, 'r:gz') as tarf:
+                with tarfile.open(file_path, "r:gz") as tarf:
                     all_files = tarf.getnames()
                     image_files = [f for f in all_files if any(f.endswith(ft) for ft in file_types)]
                     task = progress.add_task("[green]Processing TAR.GZ...", total=len(image_files))
@@ -97,7 +99,7 @@ class DataParser:
 
                 for image_name in image_files:
                     full_path = f"{file_path}/{image_name}"
-                    with open(full_path, 'rb') as file:
+                    with open(full_path, "rb") as file:
                         image, label = self.convert_image(file, full_path)
                         if image is not None:
                             processed_images.append(image)
@@ -116,8 +118,8 @@ class CaptchaDataset(Dataset):
             npz_file: Path to the NPZ file containing images and labels.
         """
         loaded_data = np.load(npz_file)
-        self.images = loaded_data['images']
-        self.labels = loaded_data['labels']
+        self.images = loaded_data["images"]
+        self.labels = loaded_data["labels"]
 
     def __len__(self):
         """Return the size of the dataset."""

@@ -3,13 +3,15 @@ import torch.nn as nn
 
 
 class CaptchaRNN(nn.Module):
-    def __init__(self,
-                 in_channels: int = 3,
-                 num_classes: int = 36,
-                 num_chars: int = 5,
-                 hidden_size: int = 256,
-                 rnn_type: str = 'LSTM',
-                 num_layers: int = 1):
+    def __init__(
+        self,
+        in_channels: int = 3,
+        num_classes: int = 36,
+        num_chars: int = 5,
+        hidden_size: int = 256,
+        rnn_type: str = "LSTM",
+        num_layers: int = 1,
+    ):
         super().__init__()
 
         # CNN feature extractor
@@ -30,7 +32,7 @@ class CaptchaRNN(nn.Module):
         self.rnn_input_size = 7 * 2 * 256  # After three MaxPool2d with kernel size 2, the shape is [7, 2, 256]
 
         # RNN layer
-        if rnn_type == 'LSTM':
+        if rnn_type == "LSTM":
             self.rnn = nn.LSTM(self.rnn_input_size, hidden_size, num_layers, batch_first=True)
         else:
             self.rnn = nn.GRU(self.rnn_input_size, hidden_size, num_layers, batch_first=True)

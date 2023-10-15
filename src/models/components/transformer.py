@@ -6,9 +6,7 @@ class TransformerBlock(nn.Module):
         super().__init__()
         self.attention = nn.MultiheadAttention(d_model, nhead)
         self.feed_forward = nn.Sequential(
-            nn.Linear(d_model, dim_feedforward),
-            nn.ReLU(),
-            nn.Linear(dim_feedforward, d_model)
+            nn.Linear(d_model, dim_feedforward), nn.ReLU(), nn.Linear(dim_feedforward, d_model)
         )
         self.layer_norm1 = nn.LayerNorm(d_model)
         self.layer_norm2 = nn.LayerNorm(d_model)
@@ -22,16 +20,18 @@ class TransformerBlock(nn.Module):
         x = self.layer_norm2(x)
         return x
 
+
 class CaptchaNet(nn.Module):
-    def __init__(self,
-                 in_channels: int = 1,
-                 kernel_size: int = 3,
-                 stride: int = 1,
-                 padding: int = 1,
-                 num_classes: int = 36,
-                 num_chars: int = 5,
-                 hidden_size: int = 256
-                 ):
+    def __init__(
+        self,
+        in_channels: int = 1,
+        kernel_size: int = 3,
+        stride: int = 1,
+        padding: int = 1,
+        num_classes: int = 36,
+        num_chars: int = 5,
+        hidden_size: int = 256,
+    ):
         super().__init__()
 
         self.feature_extractor = nn.Sequential(
@@ -60,7 +60,7 @@ class CaptchaNet(nn.Module):
             nn.ReLU(),
             nn.Linear(hidden_size * 2, hidden_size),
             nn.ReLU(),
-            nn.Linear(hidden_size, num_chars * num_classes)
+            nn.Linear(hidden_size, num_chars * num_classes),
         )
 
         self.num_chars = num_chars

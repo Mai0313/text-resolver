@@ -24,9 +24,41 @@ exclude_lines = [
     "if __name__ == .__main__.:",
 ]
 
-# ===================
-#        RUFF       #
-# ===================
+# ================== #
+#        Yapf        #
+# ================== #
+
+[tool.yapf]
+based_on_style = "google"
+column_limit = 120
+spaces_before_comment = 2
+split_before_logical_operator = true
+ALLOW_MULTILINE_DICTIONARY_KEYS = true
+ALLOW_SPLIT_BEFORE_DEFAULT_OR_NAMED_ASSIGNS = false
+ALLOW_SPLIT_BEFORE_DICT_VALUE = false
+ARITHMETIC_PRECEDENCE_INDICATION = false
+BLANK_LINE_BEFORE_NESTED_CLASS_OR_DEF = true
+BLANK_LINE_BEFORE_MODULE_DOCSTRING = true
+COALESCE_BRACKETS = true
+DEDENT_CLOSING_BRACKETS = true
+DISABLE_ENDING_COMMA_HEURISTIC = false
+EACH_DICT_ENTRY_ON_SEPARATE_LINE = true
+JOIN_MULTIPLE_LINES = true
+NO_SPACES_AROUND_SELECTED_BINARY_OPERATORS = true
+
+[tool.yapfignore]
+ignore_patterns = ["*.sql", "data/*", "logs/*", "docs/*", "build/*", "dist/*", "assets/*", "tests/*", "test/*", "test_dat"]
+
+# ================== #
+#       Black        #
+# ================== #
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+
+# ================== #
+#        RUFF        #
+# ================== #
 [tool.ruff]
 
 # Enable Auto Fixing.
@@ -41,18 +73,18 @@ show-source = true
 # Allow imports relative to the "src" and "test" directories.
 src = ["."]
 
-task-tags = ["TODO"]
+task-tags = ["TODO", "FIXME", "BUG", "XXX", "REFACT", "NOTE", "MARK", "HACK"]
 
-# Assume Python 3.9.*
-target-version = "py39"
+# Assume Python 3.8.*
+target-version = "py38"
 
 # Set the cache directory to `logs/ruff_cache`.
-# cache-dir = "logs/ruff_cache"  # default: ".ruff_cache", now it is not allowed to create cache dir in logs
+cache-dir = "~/.cache/ruff"  # default: ".ruff_cache", now it is not allowed to create cache dir in logs
 
 # Group violations by containing file.
 # This is output message format; nothing about coding
 # Options: ["text" | "json" | "junit" | "github" | "gitlab" | "pylint" | "azure"]
-format = "pylint"
+output-format = "pylint"
 
 # Same as Google Python Style Guide.
 line-length = 120
@@ -66,64 +98,40 @@ fixable = ["ALL"]
 unfixable = []
 
 # In addition to the standard set of exclusions, omit all tests, plus a specific file.
-extend-exclude = ["logs", "data", "*.sql", "__init__.py"]
+extend-exclude = ["logs", "data", "*.sql", "__init__.py", "*.svg"]
 
 # In addition to the standard set of inclusions, include `.pyw` files.
-extend-include = ["*.ipynb", ".sh"]
-
-ignore-init-module-imports = true
+extend-include = ["*.ipynb", "*.sh"]
 
 select = [
-    # pycodestyle
-    "E", "W",
     # pyflakes
     "F",
-    # mccabe
-    "C",
+    # pycodestyle
+    "E", "W",
+    # isort
+    "I",
     # pydocstyle
     "D",
     # pyupgrade
     "UP",
-    # flake8-async
-    "ASYNC",
-    # flake8-print
-    "T",
-    # flask8-import-conventions
-    "ICN",
-    # flake8-implicit-str-concat
-    "ISC",
-    # flake8-future-annotations
-    "FA",
-    # isort
-    "I",
-    # NumPy-specific rules
-    "NPY",
-    # Perflint
-    "PERF",
-    # Ruff-specific rules (RUF)
-    "RUF",
-    # "ALL",
-    # "INP", "RET", "DTZ", "PD", "S", "BLE", "PT", "PL"
+    # # bugbear Should be enabled once this branch are merged
+    # "B",
+    # # Ruff Specific Rules
+    # "RUF",
     ]
 
 ignore = [
-    # pycodestyle
-    "E101", "E203", "E402", "E501", "W505",
-
-    # pyflakes
-    "F811", "F841",
-
-    # mccabe
-    "C901",
-
-    # Docstring Related
-    "D100", "D101", "D102", "D107", "D103", "D104",
-    # No need to Fix
-    "ANN", "N", "PTH123", "ARG001", "A001",
-    # FIXME
-    "B006", "TD003", "FBT002", "FIX002", "SIM108",
-    "INP", "RET", "DTZ", "PD", "S", "BLE", "PT", "PL",
+    # Additional ignore
+    "F401" ,"E402" ,"E501" ,"F841",
+    # Missing Docs in functions
+    "D100", "D101", "D102", "D103", "D107", "D205", "D415",
+    # Doc line too long
+    "W505",
+    # print found
+    "T201",
     ]
+
+ignore-init-module-imports = true
 
 [tool.ruff.pycodestyle]
 # Ignore long comments for TODO, FIXME, XXX

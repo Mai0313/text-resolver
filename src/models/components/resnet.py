@@ -37,6 +37,7 @@ class Bottleneck(nn.Module):
 
         return x
 
+
 class CustomResNet(nn.Module):
     def __init__(self, num_classes=36, num_chars=5):
         super().__init__()
@@ -57,9 +58,7 @@ class CustomResNet(nn.Module):
 
         # Classifier
         self.classifier = nn.Sequential(
-            nn.Linear(512 * Bottleneck.expansion, 256),
-            nn.ReLU(),
-            nn.Linear(256, num_chars * num_classes)
+            nn.Linear(512 * Bottleneck.expansion, 256), nn.ReLU(), nn.Linear(256, num_chars * num_classes)
         )
 
         self.num_chars = num_chars
@@ -89,7 +88,7 @@ class CustomResNet(nn.Module):
         if stride != 1 or self.in_channels != out_channels * block.expansion:
             downsample = nn.Sequential(
                 nn.Conv2d(self.in_channels, out_channels * block.expansion, kernel_size=1, stride=stride),
-                nn.BatchNorm2d(out_channels * block.expansion)
+                nn.BatchNorm2d(out_channels * block.expansion),
             )
 
         layers.append(block(self.in_channels, out_channels, i_downsample=downsample, stride=stride))

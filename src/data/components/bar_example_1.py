@@ -49,16 +49,12 @@ step_progress = Progress(
 )
 # progress bar for current app (progress in steps)
 app_steps_progress = Progress(
-    TextColumn(
-        "[bold blue]Progress for app {task.fields[name]}: {task.percentage:.0f}%"
-    ),
+    TextColumn("[bold blue]Progress for app {task.fields[name]}: {task.percentage:.0f}%"),
     BarColumn(),
     TextColumn("({task.completed} of {task.total} steps done)"),
 )
 # overall progress bar
-overall_progress = Progress(
-    TimeElapsedColumn(), BarColumn(), TextColumn("{task.description}")
-)
+overall_progress = Progress(TimeElapsedColumn(), BarColumn(), TextColumn("{task.description}"))
 # group of progress bars;
 # some are always visible, others will disappear when progress is complete
 progress_group = Group(
@@ -81,7 +77,6 @@ overall_task_id = overall_progress.add_task("", total=len(apps))
 # which allows for running multiple different progress bars in parallel,
 # and dynamically showing/hiding them
 with Live(progress_group):
-
     for idx, (name, step_times) in enumerate(apps):
         # update message on overall progress bar
         top_descr = "[bold #AAAAAA](%d out of %d apps installed)" % (idx, len(apps))
@@ -89,22 +84,16 @@ with Live(progress_group):
 
         # add progress bar for steps of this app, and run the steps
         current_task_id = current_app_progress.add_task("Installing app %s" % name)
-        app_steps_task_id = app_steps_progress.add_task(
-            "", total=len(step_times), name=name
-        )
+        app_steps_task_id = app_steps_progress.add_task("", total=len(step_times), name=name)
         run_steps(name, step_times, app_steps_task_id)
 
         # stop and hide steps progress bar for this specific app
         app_steps_progress.update(app_steps_task_id, visible=False)
         current_app_progress.stop_task(current_task_id)
-        current_app_progress.update(
-            current_task_id, description="[bold green]App %s installed!" % name
-        )
+        current_app_progress.update(current_task_id, description="[bold green]App %s installed!" % name)
 
         # increase overall progress now this task is done
         overall_progress.update(overall_task_id, advance=1)
 
     # final update for message on overall progress bar
-    overall_progress.update(
-        overall_task_id, description="[bold green]%s apps installed, done!" % len(apps)
-    )
+    overall_progress.update(overall_task_id, description="[bold green]%s apps installed, done!" % len(apps))

@@ -28,7 +28,6 @@ class DataVisualizer:
             total_count += 1
         return correct_count, total_count
 
-
     def visualize_prediction(self, images, labels):
         """Visualize the prediction of the model."""
         labels_one_hot = F.one_hot(labels, num_classes=36).float()
@@ -54,8 +53,8 @@ class DataVisualizer:
             col = i % 2
             axs[row, col].imshow(test_image)
             # axs[row, col].imshow(test_image, cmap = 'gray')
-            axs[row, col].set_title(f'Predicted: {pred_label}\nTrue: {test_label}')
-            axs[row, col].axis('off')
+            axs[row, col].set_title(f"Predicted: {pred_label}\nTrue: {test_label}")
+            axs[row, col].axis("off")
 
         accuracy = correct_count / total_count * 100
         return fig, accuracy
