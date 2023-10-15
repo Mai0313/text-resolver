@@ -156,3 +156,5 @@ configs/local/default.yaml
 .aim
 /data
 font
+
+code
