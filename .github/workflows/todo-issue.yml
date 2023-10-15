@@ -1,0 +1,27 @@
+name: Todo to Issue
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # container: catthehacker/ubuntu:act-latest  # Uncomment it if you use it on Gitea
+
+    steps:
+      - name: Disable SSL Verify
+        run: git config --global http.sslVerify false
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Todo to Issue
+        id: todo-to-issue
+        uses: alstr/todo-to-issue-action@v4
+        with:
+          CLOSE_ISSUES: true
+          AUTO_P: true
+          AUTO_ASSIGN: true
+          ISSUE_TEMPLATE: "This is my issue title: **{{ title }}**\n\nThis is my issue body: **{{ body }}**\n\nThis is my code URL: **{{ url }}**\n\nThis is my snippet:\n\n{{ snippet }}"

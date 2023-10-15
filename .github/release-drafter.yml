@@ -4,6 +4,7 @@ tag-template: "v$RESOLVED_VERSION"
 categories:
   - title: "🚀 Features"
     labels:
+      - "feat"
       - "feature"
       - "enhancement"
   - title: "🐛 Bug Fixes"
@@ -22,6 +23,10 @@ categories:
     labels:
       - "documentation"
       - "docs"
+  - title: '⬆️ Dependencies'
+    collapse-after: 3
+    labels:
+      - 'dependencies'
 
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions

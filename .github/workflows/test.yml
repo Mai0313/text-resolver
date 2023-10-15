@@ -1,0 +1,71 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      - release/*
+
+jobs:
+  run_tests:
+    runs-on: ${{ matrix.os }}
+    # container: catthehacker/ubuntu:act-latest  # Uncomment it if you use it on Gitea
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - "3.9"
+          - "3.10"
+          - "3.11"
+
+    timeout-minutes: 20
+
+    steps:
+      - name: Disable SSL Verify
+        run: git config --global http.sslVerify false
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          # # Enable these three lines if you run on act
+          # token: ${{ secrets.GITHUB_TOKEN }}
+          # cache: 'pip'
+
+      # Disable cache since Github action cache storge is too small for Pytorch.
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          sed -i 's/opencv-contrib-python/opencv-contrib-python-headless/' requirements.txt
+          pip install -r requirements.txt
+          pip install pytest
+          pip install sh
+
+      - name: List dependencies
+        run: |
+          python -m pip list
+
+      - name: List all Folder
+        run: |
+          ls -l -a
+
+      - name: Run pytest
+        run: |
+          pytest -v
