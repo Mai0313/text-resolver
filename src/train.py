@@ -29,6 +29,7 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 from src import utils
 
 log = utils.get_pylogger(__name__)
+torch.set_float32_matmul_precision("medium")  # torch.set_float32_matmul_precision('medium' | 'high')
 
 
 @utils.task_wrapper
@@ -121,5 +122,4 @@ def main(cfg: DictConfig) -> Optional[float]:
 
 
 if __name__ == "__main__":
-    torch.set_float32_matmul_precision("medium")  # torch.set_float32_matmul_precision('medium' | 'high')
     main()
