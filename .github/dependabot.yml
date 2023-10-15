@@ -13,3 +13,5 @@ updates:
       - dependency-name: "sqlalchemy"
       - dependency-name: "pydantic"
       - dependency-name: "aim"
+      - dependency-name: "timm"
+      - dependency-name: "Pillow"
