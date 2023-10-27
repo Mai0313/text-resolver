@@ -7,9 +7,6 @@ on:
   # manually trigger a workflow_dispatch event
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
   auto-update:
     runs-on: ubuntu-latest
@@ -48,3 +45,9 @@ jobs:
           title: Update pre-commit hooks
           commit-message: "chore: update pre-commit hooks"
           body: Update versions of pre-commit hooks to latest version.
+      - name: Auto Merge Pull Request
+        if: steps.pre-commit-autoupdate.outputs.pull-request-number
+        run: |
+          gh pr merge --auto --merge update/pre-commit-hooks
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
