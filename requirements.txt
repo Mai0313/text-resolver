@@ -12,7 +12,7 @@ torchaudio==2.1.0+cu118
 
 # Basic Packages
 lightning>=2.0.8
-mlflow==2.8.0
+mlflow==2.8.1
 pydantic<2.0,>=1.7.4
 SQLAlchemy==1.4.49
 aim<4.0.0
