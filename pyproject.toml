@@ -55,7 +55,7 @@ ignore_patterns = ["*.sql", "data/*", "logs/*", "docs/*", "build/*", "dist/*", "
 # ================== #
 [tool.black]
 line-length = 99
-target-version = ["py39"]
+target-version = ["py38"]
 
 # ================== #
 #        RUFF        #
@@ -76,8 +76,8 @@ src = ["."]
 
 task-tags = ["TODO", "FIXME", "BUG", "XXX", "REFACT", "NOTE", "MARK", "HACK"]
 
-# Assume Python 3.9.*
-target-version = "py39"
+# Assume Python 3.8.*
+target-version = "py38"
 
 # Set the cache directory to `logs/ruff_cache`.
 cache-dir = "~/.cache/ruff"  # default: ".ruff_cache", now it is not allowed to create cache dir in logs

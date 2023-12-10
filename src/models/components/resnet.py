@@ -5,7 +5,7 @@ from lightning import LightningModule
 class Bottleneck(LightningModule):
     expansion = 4
 
-    def __init__(self, in_channels, out_channels, i_downsample=None, stride=1):
+    def __init__(self, in_channels, out_channels, i_downsample=None, stride=1, **kwargs):
         super().__init__()
 
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0)
