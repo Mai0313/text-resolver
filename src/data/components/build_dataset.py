@@ -63,6 +63,10 @@ class DataParser:
         labels = []
         file_types = [".png", ".jpg"]
 
+        target_folder = Path(save_path).parent.absolute()
+        print(f"target_folder: {target_folder}")
+        os.makedirs(target_folder, exist_ok=True)
+
         with Progress() as progress:
             if file_path.endswith("zip"):
                 with zipfile.ZipFile(file_path, "r") as zipf:
