@@ -99,7 +99,9 @@ class CaptchaModule(LightningModule):
         self.val_acc.reset()
         self.val_acc_best.reset()
 
-    def model_step(self, batch: tuple[torch.Tensor, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def model_step(
+        self, batch: tuple[torch.Tensor, torch.Tensor]
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         images, labels_encoded = batch
 
         prediction = self.forward(images)
@@ -107,11 +109,15 @@ class CaptchaModule(LightningModule):
         losses = {}  # a dict of {loss_fn_name: loss_value}
         losses["total_loss"] = 0.0
         for loss_fn in self.loss_fns:
-            losses[loss_fn.tag] = loss_fn(prediction=prediction, images=images, labels_encoded=labels_encoded)
+            losses[loss_fn.tag] = loss_fn(
+                prediction=prediction, images=images, labels_encoded=labels_encoded
+            )
             losses["total_loss"] += losses[loss_fn.tag] * loss_fn.weight
         return losses, prediction, images, labels_encoded
 
-    def training_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
+    def training_step(
+        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> torch.Tensor:
         losses, prediction, images, labels_encoded = self.model_step(batch)
 
         self.train_loss(losses.get("total_loss"))
@@ -130,7 +136,9 @@ class CaptchaModule(LightningModule):
         for loss_name, loss_value in losses.items():
             self.log(f"val/{loss_name}", loss_value, on_step=False, on_epoch=True, prog_bar=True)
         if batch_idx % 100 == 0:
-            fig, accuracy = DataVisualizer(self.net, self.device).visualize_prediction(images, labels_encoded)
+            fig, accuracy = DataVisualizer(self.net, self.device).visualize_prediction(
+                images, labels_encoded
+            )
             self.logger.experiment.add_figure("Predicted_Images", fig, self.global_step)
             self.logger.experiment.add_scalar("Accuracy", accuracy, self.global_step)
             self.log("val/Accuracy", accuracy, on_step=False, on_epoch=True, prog_bar=True)

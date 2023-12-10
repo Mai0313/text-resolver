@@ -13,7 +13,9 @@ class Bottleneck(nn.Module):
         self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=stride, padding=1)
         self.batch_norm2 = nn.BatchNorm2d(out_channels)
 
-        self.conv3 = nn.Conv2d(out_channels, out_channels * self.expansion, kernel_size=1, stride=1, padding=0)
+        self.conv3 = nn.Conv2d(
+            out_channels, out_channels * self.expansion, kernel_size=1, stride=1, padding=0
+        )
         self.batch_norm3 = nn.BatchNorm2d(out_channels * self.expansion)
 
         self.i_downsample = i_downsample
@@ -58,7 +60,9 @@ class CustomResNet(nn.Module):
 
         # Classifier
         self.classifier = nn.Sequential(
-            nn.Linear(512 * Bottleneck.expansion, 256), nn.ReLU(), nn.Linear(256, num_chars * num_classes)
+            nn.Linear(512 * Bottleneck.expansion, 256),
+            nn.ReLU(),
+            nn.Linear(256, num_chars * num_classes),
         )
 
         self.num_chars = num_chars
@@ -87,14 +91,18 @@ class CustomResNet(nn.Module):
 
         if stride != 1 or self.in_channels != out_channels * block.expansion:
             downsample = nn.Sequential(
-                nn.Conv2d(self.in_channels, out_channels * block.expansion, kernel_size=1, stride=stride),
+                nn.Conv2d(
+                    self.in_channels, out_channels * block.expansion, kernel_size=1, stride=stride
+                ),
                 nn.BatchNorm2d(out_channels * block.expansion),
             )
 
-        layers.append(block(self.in_channels, out_channels, i_downsample=downsample, stride=stride))
+        layers.append(
+            block(self.in_channels, out_channels, i_downsample=downsample, stride=stride)
+        )
         self.in_channels = out_channels * block.expansion
 
         for _ in range(1, blocks):
-            layers.append(block(self.in_channels, out_channels))  # noqa: PERF401
+            layers.append(block(self.in_channels, out_channels))
 
         return nn.Sequential(*layers)

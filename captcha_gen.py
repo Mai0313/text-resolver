@@ -64,10 +64,16 @@ def generate_captcha_image_default_font(
 
 # Usage example
 for i in range(10000):
-    generate_captcha_image_default_font(length=5, width=58, height=20, font_size=13, tasktype="train")
+    generate_captcha_image_default_font(
+        length=5, width=58, height=20, font_size=13, tasktype="train"
+    )
 
 for i in range(1000):
-    generate_captcha_image_default_font(length=5, width=58, height=20, font_size=13, tasktype="test")
+    generate_captcha_image_default_font(
+        length=5, width=58, height=20, font_size=13, tasktype="test"
+    )
 
 for i in range(500):
-    generate_captcha_image_default_font(length=5, width=58, height=20, font_size=13, tasktype="val")
+    generate_captcha_image_default_font(
+        length=5, width=58, height=20, font_size=13, tasktype="val"
+    )

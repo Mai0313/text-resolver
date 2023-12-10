@@ -1,4 +1,4 @@
-import autorootcwd  # noqa: F401
+import autorootcwd
 import torch
 
 

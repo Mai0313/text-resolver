@@ -15,16 +15,40 @@ class CaptchaNet(nn.Module):
         super().__init__()
 
         self.feature_extractor = nn.Sequential(
-            nn.Conv2d(in_channels, hidden_size // 8, kernel_size=kernel_size, stride=stride, padding=padding),
+            nn.Conv2d(
+                in_channels,
+                hidden_size // 8,
+                kernel_size=kernel_size,
+                stride=stride,
+                padding=padding,
+            ),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Conv2d(hidden_size // 8, hidden_size // 4, kernel_size=kernel_size, stride=stride, padding=padding),
+            nn.Conv2d(
+                hidden_size // 8,
+                hidden_size // 4,
+                kernel_size=kernel_size,
+                stride=stride,
+                padding=padding,
+            ),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Conv2d(hidden_size // 4, hidden_size // 2, kernel_size=kernel_size, stride=stride, padding=padding),
+            nn.Conv2d(
+                hidden_size // 4,
+                hidden_size // 2,
+                kernel_size=kernel_size,
+                stride=stride,
+                padding=padding,
+            ),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
-            nn.Conv2d(hidden_size // 2, hidden_size, kernel_size=kernel_size, stride=stride, padding=padding),
+            nn.Conv2d(
+                hidden_size // 2,
+                hidden_size,
+                kernel_size=kernel_size,
+                stride=stride,
+                padding=padding,
+            ),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
         )

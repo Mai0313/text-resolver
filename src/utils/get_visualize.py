@@ -1,4 +1,4 @@
-import autorootcwd  # noqa: F401
+import autorootcwd
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -19,7 +19,12 @@ class DataVisualizer:
         for i in range(len(images)):
             test_image = images[i].cpu().numpy().squeeze()
             test_label = ImageEncoder().decode_output(labels_one_hot[i])
-            test_image_tensor = torch.tensor(test_image, dtype=torch.float32).unsqueeze(0).unsqueeze(0).to(self.device)
+            test_image_tensor = (
+                torch.tensor(test_image, dtype=torch.float32)
+                .unsqueeze(0)
+                .unsqueeze(0)
+                .to(self.device)
+            )
             with torch.no_grad():
                 output = self.model(test_image_tensor)
                 pred_label = ImageEncoder().decode_output(output.squeeze())
@@ -31,7 +36,7 @@ class DataVisualizer:
     def visualize_prediction(self, images, labels):
         """Visualize the prediction of the model."""
         labels_one_hot = F.one_hot(labels, num_classes=36).float()
-        indices = np.random.choice(len(images), 10, replace=False)  # noqa: NPY002
+        indices = np.random.choice(len(images), 10, replace=False)
 
         correct_count = 0
         total_count = 0
@@ -41,7 +46,12 @@ class DataVisualizer:
             test_image = images[index].cpu().numpy().squeeze()  # 轉換為numpy array
             test_label = ImageEncoder().decode_output(labels_one_hot[index])
 
-            test_image_tensor = torch.tensor(test_image, dtype=torch.float32).unsqueeze(0).unsqueeze(0).to(self.device)
+            test_image_tensor = (
+                torch.tensor(test_image, dtype=torch.float32)
+                .unsqueeze(0)
+                .unsqueeze(0)
+                .to(self.device)
+            )
             with torch.no_grad():
                 output = self.model(test_image_tensor)
                 pred_label = ImageEncoder().decode_output(output.squeeze())

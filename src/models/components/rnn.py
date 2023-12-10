@@ -29,7 +29,9 @@ class CaptchaRNN(nn.Module):
 
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.rnn_input_size = 7 * 2 * 256  # After three MaxPool2d with kernel size 2, the shape is [7, 2, 256]
+        self.rnn_input_size = (
+            7 * 2 * 256
+        )  # After three MaxPool2d with kernel size 2, the shape is [7, 2, 256]
 
         # RNN layer
         if rnn_type == "LSTM":

@@ -16,10 +16,14 @@ class CaptchaUNet(nn.Module):
 
         # Encoder (Downsampling path)
         self.enc1 = self.conv_block(in_channels, hidden_size // 8, kernel_size, stride, padding)
-        self.enc2 = self.conv_block(hidden_size // 8, hidden_size // 4, kernel_size, stride, padding)
+        self.enc2 = self.conv_block(
+            hidden_size // 8, hidden_size // 4, kernel_size, stride, padding
+        )
 
         # Decoder (Upsampling path)
-        self.dec1 = self.conv_block(hidden_size // 4, hidden_size // 8, kernel_size, stride, padding)
+        self.dec1 = self.conv_block(
+            hidden_size // 4, hidden_size // 8, kernel_size, stride, padding
+        )
 
         # Classifier (The input dimension is set later dynamically)
         self.classifier = nn.Sequential(
@@ -33,7 +37,9 @@ class CaptchaUNet(nn.Module):
 
     def conv_block(self, in_channels, out_channels, kernel_size, stride, padding):
         return nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding), nn.ReLU(), nn.MaxPool2d(2, 2)
+            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding),
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2),
         )
 
     def forward(self, x):
@@ -48,7 +54,9 @@ class CaptchaUNet(nn.Module):
         self.flat_size = x.shape[1] * x.shape[2] * x.shape[3]
 
         # Update the input dimension for the first Linear layer in classifier
-        self.classifier[0] = nn.Linear(self.flat_size, self.classifier[0].out_features).to(x.device)
+        self.classifier[0] = nn.Linear(self.flat_size, self.classifier[0].out_features).to(
+            x.device
+        )
 
         # Flatten and Classifier
         x = x.view(x.size(0), -1)

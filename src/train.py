@@ -29,7 +29,9 @@ rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 from src import utils
 
 log = utils.get_pylogger(__name__)
-torch.set_float32_matmul_precision("medium")  # torch.set_float32_matmul_precision('medium' | 'high')
+torch.set_float32_matmul_precision(
+    "medium"
+)  # torch.set_float32_matmul_precision('medium' | 'high')
 
 
 @utils.task_wrapper
@@ -115,7 +117,9 @@ def main(cfg: DictConfig) -> Optional[float]:
     metric_dict, _ = train(cfg)
 
     # safely retrieve metric value for hydra-based hyperparameter optimization
-    metric_value = utils.get_metric_value(metric_dict=metric_dict, metric_name=cfg.get("optimized_metric"))
+    metric_value = utils.get_metric_value(
+        metric_dict=metric_dict, metric_name=cfg.get("optimized_metric")
+    )
 
     # return optimized metric
     return metric_value
