@@ -42,9 +42,9 @@ class CaptchaModule(LightningModule):
         # for tracking best so far validation accuracy
         self.val_acc_best = MaxMetric()
 
-        # Store these value for checking accuracy
-        self.correct_count = 0
-        self.total_count = 0
+        # # Store these value for checking accuracy
+        # self.correct_count = 0
+        # self.total_count = 0
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.net(x)
@@ -121,18 +121,19 @@ class CaptchaModule(LightningModule):
             prediction, labels_encoded, self.val_acc, current_batch_size, prefix="test"
         )
 
-        self.correct_count, self.total_count = DataVisualizer(self.net, self.device).get_accuracy(
-            images, labels_encoded, self.num_classes
-        )
+        # self.correct_count, self.total_count = DataVisualizer(self.net, self.device).get_accuracy(
+        #     images, labels_encoded, self.num_classes
+        # )
 
-        self.test_loss(losses.get("total_loss"))
-        for loss_name, loss_value in losses.items():
-            self.log(f"test/{loss_name}", loss_value, on_step=False, on_epoch=True, prog_bar=True)
+        # self.test_loss(losses.get("total_loss"))
+        # for loss_name, loss_value in losses.items():
+        #     self.log(f"test/{loss_name}", loss_value, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
-        accuracy = self.correct_count / self.total_count * 100
-        self.log("Test Dataset Accuracy", accuracy)
+        # accuracy = self.correct_count / self.total_count * 100
+        # self.log("Test Dataset Accuracy", accuracy)
+        pass
 
     def setup(self, stage: str) -> None:
         """Lightning hook that is called at the beginning of fit (train + validate), validate,
@@ -168,13 +169,6 @@ class CaptchaModule(LightningModule):
                 },
             }
         return {"optimizer": optimizer}
-
-    def __get_confusion_matrix(self, preds: torch.Tensor, y: torch.Tensor):
-        if len(preds.shape) == 1:
-            preds_accuracy = (preds > 0.5).float()
-        else:
-            preds_accuracy = torch.argmax(preds, dim=1)
-        return preds_accuracy
 
     def log_loss(self, losses, loss_metrics, batch_size, prefix="train"):
         # losses: dict of per loss result
