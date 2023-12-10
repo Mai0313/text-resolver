@@ -1,22 +1,24 @@
 # --index-url https://pypi.org/simple
 # --extra-index-url https://download.pytorch.org/whl/cu118
+# --trusted-host pypi.org
 # torch==2.1.0+cu118
 # torchvision==0.16.0+cu118
 # torchaudio==2.1.0+cu118
 
 --index-url https://pypi.org/simple
 --extra-index-url https://download.pytorch.org/whl/cu116
+--trusted-host pypi.org
 torch==1.12.1+cu116
 torchvision==0.13.1+cu116
-torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116
+torchaudio==0.12.1+cu116
+Pillow==9.5.0  # If you are running on torch1.12, you need to install Pillow==9.5.0
 
 # Basic Packages
-lightning
+lightning==2.1.1
 mlflow
 pydantic
 SQLAlchemy
 # aim<4.0.0
-pre-commit
 dvc
 dvc-gdrive
 # dvc[s3]
@@ -27,20 +29,21 @@ hydra-optuna-sweeper
 opencv-contrib-python
 matplotlib
 rasterio
+rootutils
 pyrootutils
+autorootcwd
 shapely
 rootutils
 tensorboard
 tensorboardX
 wandb
 fire
-pytest
-autorootcwd
-sh
+
+# dev packages
+pre-commit
 ipykernel
 ipywidgets
 
 # Captcha Resolver Dependencies
 wget
 timm==0.4.12
-Pillow==9.5.0
