@@ -12,14 +12,14 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/20230827_captcha/train/train.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/20230827_captcha/train/train.npz
+      raw_data: ${paths.data_dir}/藍新金流_20230822  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/train/train.npz
     validation:
-      raw_data: ${paths.data_dir}/20230827_captcha/val/val.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/20230827_captcha/val/val.npz
+      raw_data: ${paths.data_dir}/藍新金流_20230824  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/val/val.npz
     test:
-      raw_data: ${paths.data_dir}/20230827_captcha/test/test.zip  # can be a folder or zip file
-      parsed_data: ${paths.data_dir}/20230827_captcha/test/test.npz
+      raw_data: ${paths.data_dir}/台灣高鐵_20230813  # can be a folder or zip file
+      parsed_data: ${paths.data_dir}/test/test.npz
   force_parse_data: False
 model:
   _target_: src.models.captcha_module.CaptchaModule
