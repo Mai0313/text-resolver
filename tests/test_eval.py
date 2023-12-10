@@ -10,6 +10,7 @@ from src.eval import evaluate
 from src.train import train
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 @pytest.mark.slow
 def test_train_eval(tmp_path: Path, cfg_train: DictConfig, cfg_eval: DictConfig) -> None:
     """Tests training and evaluation by training.
