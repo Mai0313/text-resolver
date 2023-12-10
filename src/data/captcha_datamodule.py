@@ -50,18 +50,18 @@ class CaptchaDataModule(LightningDataModule):
         """
         # Download Datasets and place into the correct folders
         # os.makedirs(self.hparams.dataset.train.raw_data, exist_ok=True)
-        if not os.path.exists(self.hparams.dataset.train.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset(
-                "http://mai0313.com/share/Datasets/train.zip", self.hparams.dataset.train.raw_data
-            )
-        if not os.path.exists(self.hparams.dataset.validation.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset(
-                "http://mai0313.com/share/Datasets/val.zip", self.hparams.dataset.validation.raw_data
-            )
-        if not os.path.exists(self.hparams.dataset.test.raw_data) or self.force_parse_data:
-            DataDownloader().get_dataset(
-                "http://mai0313.com/share/Datasets/test.zip", self.hparams.dataset.test.raw_data
-            )
+        # if not os.path.exists(self.hparams.dataset.train.raw_data) or self.force_parse_data:
+        #     DataDownloader().get_dataset(
+        #         "http://mai0313.com/share/Datasets/train.zip", self.hparams.dataset.train.raw_data
+        #     )
+        # if not os.path.exists(self.hparams.dataset.validation.raw_data) or self.force_parse_data:
+        #     DataDownloader().get_dataset(
+        #         "http://mai0313.com/share/Datasets/val.zip", self.hparams.dataset.validation.raw_data
+        #     )
+        # if not os.path.exists(self.hparams.dataset.test.raw_data) or self.force_parse_data:
+        #     DataDownloader().get_dataset(
+        #         "http://mai0313.com/share/Datasets/test.zip", self.hparams.dataset.test.raw_data
+        #     )
 
         # Parse the data
         if not os.path.exists(self.hparams.dataset.train.parsed_data) or self.force_parse_data:
