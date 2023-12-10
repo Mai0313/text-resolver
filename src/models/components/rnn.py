@@ -12,6 +12,7 @@ class CaptchaRNN(LightningModule):
         hidden_size: int = 256,
         rnn_type: str = "LSTM",
         num_layers: int = 1,
+        **kwargs,
     ):
         super().__init__()
 

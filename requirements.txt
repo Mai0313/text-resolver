@@ -43,6 +43,8 @@ fire
 pre-commit
 ipykernel
 ipywidgets
+sh
+pytest
 
 # Captcha Resolver Dependencies
 wget

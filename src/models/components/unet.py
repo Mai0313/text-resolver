@@ -12,6 +12,7 @@ class CaptchaUNet(LightningModule):
         num_classes: int = 36,
         num_chars: int = 5,
         hidden_size: int = 256,
+        **kwargs,
     ):
         super().__init__()
 

@@ -12,8 +12,8 @@ class DataVisualizer:
         self.model = model
         self.device = device
 
-    def get_accuracy(self, images, labels):
-        labels_one_hot = F.one_hot(labels, num_classes=36).float()
+    def get_accuracy(self, images, labels, num_classes):
+        labels_one_hot = F.one_hot(labels, num_classes=num_classes).float()
         correct_count = 0
         total_count = 0
         for i in range(len(images)):
