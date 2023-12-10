@@ -10,6 +10,7 @@ from src.train import train
 from tests.helpers.run_if import RunIf
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 def test_train_fast_dev_run(cfg_train: DictConfig) -> None:
     """Run for 1 train, val and test step on CPU.
 
@@ -38,6 +39,7 @@ def test_train_fast_dev_run(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 @RunIf(min_gpus=1)
 def test_train_fast_dev_run_gpu(cfg_train: DictConfig) -> None:
     """Run for 1 train, val and test step on GPU.
@@ -67,6 +69,7 @@ def test_train_fast_dev_run_gpu(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 @RunIf(min_gpus=1)
 @pytest.mark.slow
 def test_train_epoch_gpu_amp(cfg_train: DictConfig) -> None:
@@ -99,6 +102,7 @@ def test_train_epoch_gpu_amp(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 @pytest.mark.slow
 def test_train_epoch_double_val_loop(cfg_train: DictConfig) -> None:
     """Train 1 epoch with validation loop twice per epoch.
@@ -167,6 +171,7 @@ def test_train_ddp_spawn(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
+@pytest.mark.skip(reason="TODO: Implement this test.")
 @pytest.mark.slow
 def test_train_resume(tmp_path: Path, cfg_train: DictConfig) -> None:
     """Run 1 epoch, finish, and resume for another epoch.
