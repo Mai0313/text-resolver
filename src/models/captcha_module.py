@@ -80,7 +80,9 @@ class CaptchaModule(LightningModule):
         losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
 
         self.log_loss(losses, self.val_loss, current_batch_size, prefix="train")
-        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="train")
+        self.log_accuracy(
+            prediction, labels_encoded, self.val_acc, current_batch_size, prefix="train"
+        )
         return losses.get("total_loss")
 
     def on_train_epoch_end(self) -> None:
@@ -90,9 +92,10 @@ class CaptchaModule(LightningModule):
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
 
-
         self.log_loss(losses, self.val_loss, current_batch_size, prefix="val")
-        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="val")
+        self.log_accuracy(
+            prediction, labels_encoded, self.val_acc, current_batch_size, prefix="val"
+        )
 
         if batch_idx % 100 == 0:
             fig, accuracy = DataVisualizer(self.net, self.device).visualize_prediction(
@@ -114,10 +117,12 @@ class CaptchaModule(LightningModule):
         losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
 
         self.log_loss(losses, self.val_loss, current_batch_size, prefix="test")
-        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="test")
+        self.log_accuracy(
+            prediction, labels_encoded, self.val_acc, current_batch_size, prefix="test"
+        )
 
         self.correct_count, self.total_count = DataVisualizer(self.net, self.device).get_accuracy(
-            images, labels_encoded
+            images, labels_encoded, self.num_classes
         )
 
         self.test_loss(losses.get("total_loss"))
@@ -188,10 +193,7 @@ class CaptchaModule(LightningModule):
             )
 
     def log_accuracy(self, preds, y, accuracy_metrics, batch_size, prefix="train"):
-        # preds: tensor of predicted labels
-        # y: tensor of target labels
-        # prefix: str will be added to the error log
-        preds_accuracy = self.__get_confusion_matrix(preds, y)
+        preds_accuracy = preds.argmax(dim=-1)
         accuracy_metrics(preds_accuracy, y)
         self.log(
             f"{prefix}/accuracy",
