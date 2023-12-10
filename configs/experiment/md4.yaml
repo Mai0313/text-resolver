@@ -35,14 +35,16 @@ model:
     factor: 0.1
     patience: 10
   net:
-    _target_: src.models.components.transformer.CaptchaNet
+    _target_: src.models.components.transformer.TransformerCaptchaSolver
     in_channels: 1
-    kernel_size: 3
-    stride: 1
-    padding: 1
+    patch_size: 16
+    emb_size: 768
+    img_size: 96
     num_classes: 36
     num_chars: 5
-    hidden_size: 256
+    num_layers: 6
+    num_heads: 12
+    hidden_size: 2048
   compile: false
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss

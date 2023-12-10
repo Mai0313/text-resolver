@@ -46,4 +46,5 @@ ipywidgets
 
 # Captcha Resolver Dependencies
 wget
+einops
 timm==0.4.12
