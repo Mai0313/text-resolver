@@ -2,24 +2,14 @@ default_language_version:
   python: python3
 
 repos:
-  # Should be enabled either yapf or black once this branch is merged
-  # - repo: https://github.com/google/yapf.git
-  #   rev: v0.40.1
-  #   hooks:
-  #     - id: yapf
-
-  - repo: https://github.com/psf/black.git
-    rev: 23.11.0
-    hooks:
-      - id: black
-        args:
-          - --config=pyproject.toml
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
+  - repo: https://github.com/astral-sh/ruff-pre-commit.git
     # Ruff version.
-    rev: v0.1.7
+    rev: v0.1.6
     hooks:
       - id: ruff
+        args:
+          - --config=pyproject.toml
+      - id: ruff-format
         args:
           - --config=pyproject.toml
 
@@ -27,14 +17,32 @@ repos:
     rev: v4.5.0
     hooks:
       # list of supported hooks: https://pre-commit.com/hooks.html
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-docstring-first
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
       - id: check-yaml
-        args: [--allow-multiple-documents]
-      - id: debug-statements
+        args:
+          - --allow-multiple-documents
+      - id: destroyed-symlinks
       - id: detect-private-key
-      - id: check-executables-have-shebangs
+      - id: end-of-file-fixer
+      # - id: no-commit-to-branch
+      # - id: requirements-txt-fixer
+      - id: trailing-whitespace
+      - id: fix-byte-order-marker
+        exclude: docs/CNAME
+      - id: fix-encoding-pragma
+        args:
+          - --remove
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: check-docstring-first
+      - id: debug-statements
       - id: check-toml
       - id: check-case-conflict
       - id: check-added-large-files
@@ -44,14 +52,15 @@ repos:
     rev: 0.7.17
     hooks:
       - id: mdformat
-        args: ["--number"]
+        args:
+          - --number
         additional_dependencies:
           - mdformat-gfm
           - mdformat-tables
           - mdformat_frontmatter
 
   # jupyter notebook cell output clearing
-  - repo: https://github.com/kynan/nbstripout
+  - repo: https://github.com/kynan/nbstripout.git
     rev: 0.6.1
     hooks:
       - id: nbstripout
@@ -63,21 +72,16 @@ repos:
       - id: nbqa-ruff
         args:
           - --config=pyproject.toml
-          - --ignore=F811,F821,D417
+          - --ignore=F401,F811,F821,D417,T201
 
-  # # add pytest
-  # - repo: local
-  #   hooks:
-  #   - id: run_pytest
-  #     language: script
-  #     name: Run tests
-  #     entry: ./run_test.bat
-  #     stages: [commit]
-
-  # - repo: https://github.com/google/pytype
-  #   # Ruff version.
-  #   rev: 2023.09.11
-  #   hooks:
-  #     - id: pytype
-  #       # args:
-  #       #   - --config=pyproject.toml
+  # Pytest
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run pytest
+        entry: bash -c 'if command -v pytest >/dev/null 2>&1; then pytest -vv; else echo "pytest not installed, skipping tests"; fi'
+        language: system
+        types:
+          - python
+        pass_filenames: false
+        always_run: true

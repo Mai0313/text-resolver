@@ -4,6 +4,7 @@ addopts = [
   "--durations=0",
   "--strict-markers",
   "--doctest-modules",
+  "--ignore=tests/test_datamodule.py"
 ]
 filterwarnings = [
   "ignore::DeprecationWarning",
@@ -30,7 +31,7 @@ exclude_lines = [
 
 [tool.yapf]
 based_on_style = "google"
-column_limit = 120
+column_limit = 99
 spaces_before_comment = 2
 split_before_logical_operator = true
 ALLOW_MULTILINE_DICTIONARY_KEYS = true
@@ -53,8 +54,8 @@ ignore_patterns = ["*.sql", "data/*", "logs/*", "docs/*", "build/*", "dist/*", "
 #       Black        #
 # ================== #
 [tool.black]
-line-length = 120
-target-version = ["py38"]
+line-length = 99
+target-version = ["py39"]
 
 # ================== #
 #        RUFF        #
@@ -75,8 +76,8 @@ src = ["."]
 
 task-tags = ["TODO", "FIXME", "BUG", "XXX", "REFACT", "NOTE", "MARK", "HACK"]
 
-# Assume Python 3.8.*
-target-version = "py38"
+# Assume Python 3.9.*
+target-version = "py39"
 
 # Set the cache directory to `logs/ruff_cache`.
 cache-dir = "~/.cache/ruff"  # default: ".ruff_cache", now it is not allowed to create cache dir in logs
@@ -87,7 +88,7 @@ cache-dir = "~/.cache/ruff"  # default: ".ruff_cache", now it is not allowed to 
 output-format = "pylint"
 
 # Same as Google Python Style Guide.
-line-length = 120
+line-length = 99
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
@@ -116,27 +117,32 @@ select = [
     "UP",
     # # bugbear Should be enabled once this branch are merged
     # "B",
-    # # Ruff Specific Rules
-    # "RUF",
+    # Ruff Specific Rules
+    "RUF",
+    # Remove Print Out
+    "T",
     ]
 
 ignore = [
     # Additional ignore
-    "F401" ,"E402" ,"E501" ,"F841",
+    "F401", "E402", "E501", "F841",
     # Missing Docs in functions
     "D100", "D101", "D102", "D103", "D107", "D205", "D415",
     # Doc line too long
     "W505",
     # print found
-    "T201",
+    # "T201",
     ]
 
 ignore-init-module-imports = true
 
+[tool.ruff.pyflakes]
+extend-generics = ["pyrootutils", "autorootcwd", "autoroot"]
+
 [tool.ruff.pycodestyle]
 # Ignore long comments for TODO, FIXME, XXX
 ignore-overlong-task-comments = true
-max-doc-length = 120
+max-doc-length = 99
 
 [tool.ruff.pydocstyle]
 # Use Google-style docstrings.
@@ -150,7 +156,24 @@ keep-runtime-typing = true
 [tool.ruff.per-file-ignores]
 # Ignore `E402` (import violations) in all `__init__.py` files, and in `path/to/file.py`.
 "__init__.py" = ["E402"]
+"*.ipynb" = ["T201", "F401", "F811"]
 
 [tool.ruff.isort]
 combine-as-imports = true
-force-single-line = false
+order-by-type = true
+split-on-trailing-comma=false
+
+[tool.ruff.format]
+# The file you may want to ignore
+exclude = ["generated"]
+
+# Use tabs instead of 4 space indentation.
+indent-style = "space"
+
+# Automatically detect the line ending on a file per file basis.
+line-ending = "auto"
+
+# Prefer single quotes over double quotes
+quote-style = "double"
+
+skip-magic-trailing-comma = true
