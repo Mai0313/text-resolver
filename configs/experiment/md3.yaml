@@ -12,7 +12,7 @@ data:
   pin_memory: False
   dataset:
     train:
-      raw_data: ${paths.data_dir}/藍新金流_20230823  # can be a folder or zip file
+      raw_data: ${paths.data_dir}/藍新金流_20230813  # can be a folder or zip file
       parsed_data: ${paths.data_dir}/train/train.npz
     validation:
       raw_data: ${paths.data_dir}/藍新金流_20230814  # can be a folder or zip file
