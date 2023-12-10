@@ -9,38 +9,6 @@ from src.utils.get_visualize import DataVisualizer
 
 
 class CaptchaModule(LightningModule):
-    """Example of a `LightningModule` for MNIST classification.
-
-    A `LightningModule` implements 8 key methods:
-
-    ```python
-    def __init__(self):
-    # Define initialization code here.
-
-    def setup(self, stage):
-    # Things to setup before each stage, 'fit', 'validate', 'test', 'predict'.
-    # This hook is called on every process when using DDP.
-
-    def training_step(self, batch, batch_idx):
-    # The complete training step.
-
-    def validation_step(self, batch, batch_idx):
-    # The complete validation step.
-
-    def test_step(self, batch, batch_idx):
-    # The complete test step.
-
-    def predict_step(self, batch, batch_idx):
-    # The complete predict step.
-
-    def configure_optimizers(self):
-    # Define and configure optimizers and LR schedulers.
-    ```
-
-    Docs:
-        https://lightning.ai/docs/pytorch/latest/common/lightning_module.html
-    """
-
     def __init__(
         self,
         net: torch.nn.Module,
@@ -49,12 +17,6 @@ class CaptchaModule(LightningModule):
         scheduler: torch.optim.lr_scheduler,
         compile: bool = False,
     ) -> None:
-        """Initialize a `MNISTLitModule`.
-
-        :param net: The model to train.
-        :param optimizer: The optimizer to use for training.
-        :param scheduler: The learning rate scheduler to use for training.
-        """
         super().__init__()
 
         # this line allows to access init params with 'self.hparams' attribute
@@ -67,9 +29,10 @@ class CaptchaModule(LightningModule):
         self.loss_fns = loss_fns
 
         # metric objects for calculating and averaging accuracy across batches
-        self.train_acc = Accuracy(task="multiclass", num_classes=36)
-        self.val_acc = Accuracy(task="multiclass", num_classes=36)
-        self.test_acc = Accuracy(task="multiclass", num_classes=36)
+        self.num_classes = self.hparams.net.num_classes + 1
+        self.train_acc = Accuracy(task="multiclass", num_classes=self.num_classes)
+        self.val_acc = Accuracy(task="multiclass", num_classes=self.num_classes)
+        self.test_acc = Accuracy(task="multiclass", num_classes=self.num_classes)
 
         # for averaging loss across batches
         self.train_loss = MeanMetric()
@@ -84,11 +47,6 @@ class CaptchaModule(LightningModule):
         self.total_count = 0
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Perform a forward pass through the model `self.net`.
-
-        :param x: A tensor of images.
-        :return: A tensor of logits.
-        """
         return self.net(x)
 
     def on_train_start(self) -> None:
