@@ -73,7 +73,7 @@ class CaptchaDataModule(LightningDataModule):
         if not os.path.exists(self.hparams.dataset.test.parsed_data) or self.force_parse_data:
             DataParser().process_images(self.hparams.dataset.test.raw_data, self.hparams.dataset.test.parsed_data)
 
-    def setup(self, stage: Optional[str] = None) -> None:
+    def setup(self, stage: Optional[str] = None):
         """Load data. Set variables: `self.data_train`, `self.data_val`, `self.data_test`.
 
         This method is called by Lightning before `trainer.fit()`, `trainer.validate()`, `trainer.test()`, and
@@ -83,6 +83,13 @@ class CaptchaDataModule(LightningDataModule):
 
         :param stage: The stage to setup. Either `"fit"`, `"validate"`, `"test"`, or `"predict"`. Defaults to ``None``.
         """
+        if self.trainer is not None:
+            if self.hparams.batch_size % self.trainer.world_size != 0:
+                raise RuntimeError(
+                    f"Batch size ({self.hparams.batch_size}) is not divisible by the number of devices ({self.trainer.world_size})."
+                )
+            self.batch_size_per_device = self.hparams.batch_size // self.trainer.world_size
+
         # load and split datasets only if not loaded already
         self.hparams.train_dataset = self.hparams.dataset.train.parsed_data
         self.hparams.val_dataset = self.hparams.dataset.validation.parsed_data
