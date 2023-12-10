@@ -1,7 +1,8 @@
 import torch.nn as nn
+from lightning import LightningModule
 
 
-class TransformerBlock(nn.Module):
+class TransformerBlock(LightningModule):
     def __init__(self, d_model, nhead, dim_feedforward):
         super().__init__()
         self.attention = nn.MultiheadAttention(d_model, nhead)

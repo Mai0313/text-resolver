@@ -1,7 +1,8 @@
+from lightning import LightningModule
 from torch import nn
 
 
-class CaptchaNet(nn.Module):
+class CaptchaNet(LightningModule):
     def __init__(
         self,
         in_channels: int = 1,

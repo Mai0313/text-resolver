@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
+from lightning import LightningModule
 
 
-class CaptchaRNN(nn.Module):
+class CaptchaRNN(LightningModule):
     def __init__(
         self,
         in_channels: int = 3,

@@ -1,7 +1,8 @@
 import torch.nn as nn
+from lightning import LightningModule
 
 
-class Bottleneck(nn.Module):
+class Bottleneck(LightningModule):
     expansion = 4
 
     def __init__(self, in_channels, out_channels, i_downsample=None, stride=1):
