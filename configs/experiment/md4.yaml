@@ -38,13 +38,13 @@ model:
     _target_: src.models.components.transformer.TransformerCaptchaSolver
     in_channels: 1
     patch_size: 16
-    emb_size: 768
+    emb_size: 64
     img_size: 96
     num_classes: 36
     num_chars: 5
-    num_layers: 6
-    num_heads: 12
-    hidden_size: 2048
+    num_layers: 1
+    num_heads: 8
+    hidden_size: 128
   compile: false
   loss_fns:
   - _target_: src.models.components.loss_fn.CrossEntropyLoss
