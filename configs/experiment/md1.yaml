@@ -1,13 +1,5 @@
 # @package _global_
-defaults:
-  - override /data: mnist
-  - override /model: mnist
-  - override /callbacks: default
-  - override /trainer: default
-  - override /extras: default
-  - override /paths: default
-
-task_name: "captcha"
+task_name: captcha
 tags: ["dev"]
 train: True
 test: True
@@ -93,8 +85,8 @@ trainer:
   logger: True
   callbacks: [checkpoint_callback]
   fast_dev_run: False
+  min_epochs: 10
   max_epochs: 720
-  min_epochs: null
   max_steps: -1
   min_steps: null
   max_time: null
@@ -113,7 +105,7 @@ trainer:
   accumulate_grad_batches: 1
   gradient_clip_val: null
   gradient_clip_algorithm: null
-  deterministic: null
+  deterministic: False
   benchmark: null
   inference_mode: True
   use_distributed_sampler: True
@@ -129,6 +121,6 @@ paths:
   output_dir: ${hydra:runtime.output_dir}
   work_dir: ${hydra:runtime.cwd}
 extras:
-  ignore_warnings: True
+  ignore_warnings: False
   enforce_tags: True
   print_config: True
