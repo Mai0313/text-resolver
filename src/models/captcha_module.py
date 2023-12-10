@@ -61,6 +61,7 @@ class CaptchaModule(LightningModule):
         self, batch: tuple[torch.Tensor, torch.Tensor]
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         images, labels_encoded = batch
+        current_batch_size = images.shape[0]
 
         prediction = self.forward(images)
 
@@ -71,16 +72,15 @@ class CaptchaModule(LightningModule):
                 prediction=prediction, images=images, labels_encoded=labels_encoded
             )
             losses["total_loss"] += losses[loss_fn.tag] * loss_fn.weight
-        return losses, prediction, images, labels_encoded
+        return losses, prediction, images, labels_encoded, current_batch_size
 
     def training_step(
         self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
     ) -> torch.Tensor:
-        losses, prediction, images, labels_encoded = self.model_step(batch)
+        losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
 
-        self.train_loss(losses.get("total_loss"))
-        for loss_name, loss_value in losses.items():
-            self.log(f"train/{loss_name}", loss_value, on_step=False, on_epoch=True, prog_bar=True)
+        self.log_loss(losses, self.val_loss, current_batch_size, prefix="train")
+        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="train")
         return losses.get("total_loss")
 
     def on_train_epoch_end(self) -> None:
@@ -88,11 +88,12 @@ class CaptchaModule(LightningModule):
         pass
 
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        losses, prediction, images, labels_encoded = self.model_step(batch)
+        losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
 
-        self.val_loss(losses.get("total_loss"))
-        for loss_name, loss_value in losses.items():
-            self.log(f"val/{loss_name}", loss_value, on_step=False, on_epoch=True, prog_bar=True)
+
+        self.log_loss(losses, self.val_loss, current_batch_size, prefix="val")
+        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="val")
+
         if batch_idx % 100 == 0:
             fig, accuracy = DataVisualizer(self.net, self.device).visualize_prediction(
                 images, labels_encoded
@@ -102,10 +103,18 @@ class CaptchaModule(LightningModule):
             self.log("val/Accuracy", accuracy, on_step=False, on_epoch=True, prog_bar=True)
 
     def on_validation_epoch_end(self) -> None:
-        pass
+        """Lightning hook that is called when a validation epoch ends."""
+        acc = self.val_acc.compute()  # get current val acc
+        self.val_acc_best(acc)  # update best so far val acc
+        # log `val_acc_best` as a value through `.compute()` method, instead of as a metric object
+        # otherwise metric would be reset by lightning after each epoch
+        self.log("val/acc_best", self.val_acc_best.compute(), sync_dist=True, prog_bar=True)
 
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        losses, prediction, images, labels_encoded = self.model_step(batch)
+        losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
+
+        self.log_loss(losses, self.val_loss, current_batch_size, prefix="test")
+        # self.log_accuracy(prediction, labels_encoded, self.val_acc, current_batch_size, prefix="test")
 
         self.correct_count, self.total_count = DataVisualizer(self.net, self.device).get_accuracy(
             images, labels_encoded
@@ -133,16 +142,15 @@ class CaptchaModule(LightningModule):
             self.net = torch.compile(self.net)
 
     def configure_optimizers(self) -> dict[str, Any]:
-        """Configures optimizers and learning-rate schedulers to be used for training.
-
-        Normally you'd need one, but in the case of GANs or similar you might need multiple.
+        """Choose what optimizers and learning-rate schedulers to use in your optimization.
+        Normally you'd need one. But in the case of GANs or similar you might have multiple.
 
         Examples:
             https://lightning.ai/docs/pytorch/latest/common/lightning_module.html#configure-optimizers
 
         :return: A dict containing the configured optimizers and learning-rate schedulers to be used for training.
         """
-        optimizer = self.hparams.optimizer(params=self.parameters())
+        optimizer = self.hparams.optimizer(params=self.trainer.model.parameters())
         if self.hparams.scheduler is not None:
             scheduler = self.hparams.scheduler(optimizer=optimizer)
             return {
@@ -155,6 +163,45 @@ class CaptchaModule(LightningModule):
                 },
             }
         return {"optimizer": optimizer}
+
+    def __get_confusion_matrix(self, preds: torch.Tensor, y: torch.Tensor):
+        if len(preds.shape) == 1:
+            preds_accuracy = (preds > 0.5).float()
+        else:
+            preds_accuracy = torch.argmax(preds, dim=1)
+        return preds_accuracy
+
+    def log_loss(self, losses, loss_metrics, batch_size, prefix="train"):
+        # losses: dict of per loss result
+        # loss_metrics: dict of metrics from the torchmetric
+        # prefix: str will be added to the error log
+        for loss_name, loss_value in losses.items():
+            loss_value = loss_value.item()
+            self.log(
+                f"{prefix}/{loss_name}",
+                loss_metrics(loss_value),
+                on_step=False,
+                on_epoch=True,
+                prog_bar=True,
+                batch_size=batch_size,
+                sync_dist=True,
+            )
+
+    def log_accuracy(self, preds, y, accuracy_metrics, batch_size, prefix="train"):
+        # preds: tensor of predicted labels
+        # y: tensor of target labels
+        # prefix: str will be added to the error log
+        preds_accuracy = self.__get_confusion_matrix(preds, y)
+        accuracy_metrics(preds_accuracy, y)
+        self.log(
+            f"{prefix}/accuracy",
+            accuracy_metrics(preds_accuracy, y),
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            batch_size=batch_size,
+            sync_dist=True,
+        )
 
 
 if __name__ == "__main__":
