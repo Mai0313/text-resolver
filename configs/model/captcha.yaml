@@ -1,0 +1,37 @@
+_target_: src.models.captcha_module.CaptchaModule
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.001
+  weight_decay: 0.0
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 10
+net:
+  _target_: src.models.components.transformer.TransformerCaptchaSolver
+  in_channels: 1
+  patch_size: 16
+  emb_size: 64
+  img_size: 96
+  num_classes: 36
+  num_chars: 5
+  num_layers: 1
+  num_heads: 8
+  hidden_size: 128
+compile: false
+loss_fns:
+- _target_: src.models.components.loss_fn.CrossEntropyLoss
+  tag: original_loss
+  weight: 1.0
+# - _target_: src.models.components.loss_fn.CorrectnessLoss
+#   tag: correctness_loss
+#   weight: 0.2
+# - _target_: src.models.components.loss_fn.CorrectnessRewardLoss
+#   tag: correctness_reward_loss
+#   weight: 0.1
+# - _target_: src.models.components.loss_fn.AccuracyLoss
+#   tag: accuracy_loss
+#   weight: 1
