@@ -17,7 +17,7 @@ on:
       - release/*
 
 jobs:
-  code-quality:
+  code-quality-check:
     runs-on: ubuntu-latest
     # container: catthehacker/ubuntu:act-latest  # Uncomment it if you use it on Gitea
 
@@ -26,21 +26,22 @@ jobs:
         run: git config --global http.sslVerify false
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        # with:  # Enable those three lines if runing on act.
-        #   python-version: '3.9'
-        #   token: ${{ secrets.GH_TOKEN }}
-        #   cache: 'pip'
+        with:
+          python-version: '3.9'
+          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
 
       - name: Cache pre-commit dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pre-commit
 
       - name: Run pre-commits
         id: code-quality-check
-        uses: pre-commit/action@v2.0.3
+        uses: pre-commit/action@v3.0.0

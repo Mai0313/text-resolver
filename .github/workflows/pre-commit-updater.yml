@@ -28,26 +28,31 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        # with:  # Enable those three lines if runing on act.
-        #   python-version: '3.9'
-        #   token: ${{ secrets.GH_TOKEN }}
-        #   cache: 'pip'
+        with:
+          python-version: '3.9'
+          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
 
       - name: Update Pre-Commit
         uses: browniebroke/pre-commit-autoupdate-action@main
+
+      - name: Commit any changes
+        run: |
+          git add -A
+          git commit -m "Commit any changes before switching branches" || echo "No changes to commit"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         id: pre-commit-autoupdate
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
           branch: update/pre-commit-hooks
           title: Update pre-commit hooks
           commit-message: "chore: update pre-commit hooks"
           body: Update versions of pre-commit hooks to latest version.
+
       - name: Auto Merge Pull Request
         if: steps.pre-commit-autoupdate.outputs.pull-request-number
         run: |
           gh pr merge --auto --merge update/pre-commit-hooks
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}

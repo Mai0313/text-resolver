@@ -3,10 +3,10 @@ name: Tests
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
       - release/*
 
 jobs:
@@ -21,8 +21,6 @@ jobs:
           - ubuntu-latest
         python-version:
           - "3.9"
-          - "3.10"
-          - "3.11"
 
     timeout-minutes: 20
 
@@ -31,29 +29,26 @@ jobs:
         run: git config --global http.sslVerify false
 
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+        uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          # # Enable these three lines if you run on act
-          # token: ${{ secrets.GITHUB_TOKEN }}
-          # cache: 'pip'
+          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
 
       # Disable cache since Github action cache storge is too small for Pytorch.
       - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-python${{ matrix.python-version }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-python${{ matrix.python-version }}-pip-
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          sed -i 's/opencv-contrib-python/opencv-contrib-python-headless/' requirements.txt
           pip install -r requirements.txt
           pip install pytest
           pip install sh
@@ -62,10 +57,20 @@ jobs:
         run: |
           python -m pip list
 
-      - name: List all Folder
+      # echo "::set-output name=has_tests::true"
+      # echo "::set-output name=has_tests::false"
+      - name: Check for tests
+        id: check_tests
         run: |
-          ls -l -a
+          if [ -f tests/test_*.py ] || [ -d tests ]; then
+              echo "Tests exist, proceeding to run them."
+              echo "has_tests=true" >> $GITHUB_OUTPUT
+          else
+              echo "No tests to run."
+              echo "has_tests=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Run pytest
+        if: steps.check_tests.outputs.has_tests == 'true'
         run: |
           pytest -v

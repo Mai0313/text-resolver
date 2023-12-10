@@ -10,8 +10,4 @@ updates:
     schedule:
       interval: "daily"
     ignore:
-      - dependency-name: "sqlalchemy"
       - dependency-name: "pydantic"
-      - dependency-name: "aim"
-      - dependency-name: "timm"
-      - dependency-name: "Pillow"
