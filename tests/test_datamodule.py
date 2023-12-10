@@ -9,6 +9,7 @@ from src.data.captcha_datamodule import CaptchaDataModule
 
 # flake8: noqa: E501
 
+
 @pytest.mark.parametrize("batch_size", [32, 64, 128])
 def test_captcha_datamodule(batch_size: int) -> None:
     """Test datamodule with all configs under `./configs/experiment/*.yaml`.
@@ -34,12 +35,7 @@ def test_captcha_datamodule(batch_size: int) -> None:
         pin_memory = cfg.data.pin_memory
         force_parse_data = cfg.data.force_parse_data
 
-        dm = CaptchaDataModule(
-            batch_size,
-            num_workers,
-            pin_memory,
-            force_parse_data,
-        )
+        dm = CaptchaDataModule(batch_size, num_workers, pin_memory, force_parse_data)
 
         dm.prepare_data()
 
