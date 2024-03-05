@@ -14,7 +14,7 @@ torchaudio==0.12.1+cu116
 Pillow==9.5.0  # If you are running on torch1.12, you need to install Pillow==9.5.0
 
 # Basic Packages
-lightning==2.1.2
+lightning==2.2.1
 mlflow
 pydantic
 SQLAlchemy
