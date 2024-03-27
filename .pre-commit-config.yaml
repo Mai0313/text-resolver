@@ -67,7 +67,7 @@ repos:
 
   # jupyter notebook linting
   - repo: https://github.com/nbQA-dev/nbQA.git
-    rev: 1.8.4
+    rev: 1.8.5
     hooks:
       - id: nbqa-ruff
         args:
