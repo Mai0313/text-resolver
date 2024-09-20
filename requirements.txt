@@ -1,7 +1,7 @@
 # --index-url https://pypi.org/simple
-# --extra-index-url https://download.pytorch.org/whl/cu118
+# --extra-index-url https://download.pytorch.org/whl/
 # --trusted-host pypi.org
-# torch==2.1.0+cu118
+# torch==2.4.0+cu124
 # torchvision==0.16.0+cu118
 # torchaudio==2.1.0+cu118
 
@@ -19,9 +19,7 @@ mlflow
 pydantic
 SQLAlchemy
 # aim<4.0.0
-dvc
-dvc-gdrive
-# dvc[s3]
+dvc[gdrive]
 rich
 hydra-core
 hydra-colorlog
@@ -30,7 +28,6 @@ opencv-contrib-python
 matplotlib
 rasterio
 rootutils
-pyrootutils
 autorootcwd
 shapely
 rootutils
@@ -49,4 +46,4 @@ pytest
 # Captcha Resolver Dependencies
 wget
 einops
-timm==0.4.12
+# timm==0.4.12

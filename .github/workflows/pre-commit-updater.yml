@@ -7,17 +7,13 @@ on:
   # manually trigger a workflow_dispatch event
   workflow_dispatch:
 
+
+permissions: write-all
+
 jobs:
   auto-update:
     runs-on: ubuntu-latest
-    # container: catthehacker/ubuntu:act-latest  # Uncomment it if you use it on Gitea
-
-    permissions:
-      # write permission is required to create a github release
-      contents: write
-      # write permission is required for autolabeler
-      # otherwise, read permission is required at least
-      pull-requests: write
+    # container: catthehacker/ubuntu:act-20.04  # Uncomment it if you use it on Gitea
 
     steps:
       - name: Disable SSL Verify
@@ -25,12 +21,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+          submodules: 'recursive'
 
       - name: Update Pre-Commit
         uses: browniebroke/pre-commit-autoupdate-action@main
@@ -44,7 +38,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         id: pre-commit-autoupdate
         with:
-          token: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: update/pre-commit-hooks
           title: Update pre-commit hooks
           commit-message: "chore: update pre-commit hooks"
@@ -55,4 +49,4 @@ jobs:
         run: |
           gh pr merge --auto --merge update/pre-commit-hooks
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN || secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
