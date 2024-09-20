@@ -1,13 +1,12 @@
 import os
 from pathlib import Path
 
-import pytest
 import torch
-from hydra.core.hydra_config import HydraConfig
-from omegaconf import DictConfig, open_dict
-
+import pytest
 from src.eval import evaluate
+from omegaconf import DictConfig, open_dict
 from src.train import train
+from hydra.core.hydra_config import HydraConfig
 
 
 @pytest.mark.skip(reason="TODO: Implement this test.")

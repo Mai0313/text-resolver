@@ -1,12 +1,14 @@
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any
 
 import hydra
-import lightning as L
-import rootutils
 import torch
-from lightning import Callback, LightningDataModule, LightningModule, Trainer
-from lightning.pytorch.loggers import Logger
+import lightning as L  # noqa: N812
+from lightning import Trainer, Callback, LightningModule, LightningDataModule
 from omegaconf import DictConfig
+import rootutils
+
+if TYPE_CHECKING:
+    from lightning.pytorch.loggers import Logger
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -44,8 +46,11 @@ def train(cfg: DictConfig) -> tuple[dict[str, Any], dict[str, Any]]:
     This method is wrapped in optional @task_wrapper decorator, that controls the behavior during
     failure. Useful for multiruns, saving info about the crash, etc.
 
-    :param cfg: A DictConfig configuration composed by Hydra.
-    :return: A tuple with metrics and dict with all instantiated objects.
+    Args:
+        cfg: A DictConfig configuration composed by Hydra.
+
+    Returns:
+        A tuple with metrics and dict with all instantiated objects.
     """
     # set seed for random number generators in pytorch, numpy and python.random
     if cfg.get("seed"):
@@ -103,11 +108,14 @@ def train(cfg: DictConfig) -> tuple[dict[str, Any], dict[str, Any]]:
 
 
 @hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
-def main(cfg: DictConfig) -> Optional[float]:
+def main(cfg: DictConfig) -> float | None:
     """Main entry point for training.
 
-    :param cfg: DictConfig configuration composed by Hydra.
-    :return: Optional[float] with optimized metric value.
+    Args:
+        cfg: DictConfig configuration composed by Hydra.
+
+    Returns:
+        Optional[float] with optimized metric value.
     """
     # apply extra utilities
     # (e.g. ask for tags if none are provided in cfg, print cfg tree, etc.)

@@ -1,26 +1,65 @@
-"Feature: New File":
-- 'src/**/*'
-- 'tests/**/*'
+# Feature Branches
+feature:
+  - head-branch:
+      - "feat/*"                    # Feature branches
+      - "refactor/*"                # Refactor branches
+      - "enhance/*"                 # Enhancement branches
+      - "perf/*"                    # Performance improvement branches
+  - changed-files:
+      - "src/**/*"                  # Any file in src, except documentation files
+      - "!src/docs/*"
 
-"Bugfix: Source Code":
-- 'src/**/*.py'
+# Bug Fixes
+bugfix:
+  - head-branch:
+      - "^bug"                      # Branches starting with 'bug'
+      - "bug"
+      - "fix/*"                     # Fix branches
+      - "bugfix/*"                  # Bugfix branches
+      - "hotfix/*"                  # Hotfix branches
 
-"Chore: Tests":
-- 'tests/**/*.py'
+# Maintenance
+chore:
+  - head-branch:
+      - "chore/*"                   # Chore branches
+      - "style/*"                   # Style branches
+      - "test/*"                    # Test branches
+      - "ci/*"                      # CI branches
+      - "cd/*"                      # CD branches
+      - "config/*"                  # Configuration branches
+  - changed-files:
+      - ".github/**"                # GitHub Actions and workflows
+      - ".pre-commit-config.yaml"   # Pre-commit hooks configuration
+      - "pyproject.toml"            # Python project configuration
 
-"Chore: Documentation":
-- '**/*.md'
-- 'docs/**/*'
+# Dependencies
+dependencies:
+  - changed-files:
+      - "requirements.txt"          # Python dependencies
+      - "requirements.lock"         # Rye lock file
+      - "requirements-dev.lock"     # Rye dev lock file
+      - "poetry.lock"               # Poetry lock file
 
-"Chore: CI/CD Workflow":
-- .github/workflows/**
+# Documentation
+documentation:
+  - head-branch:
+      - "docs/*"                    # Documentation branches
+      - "doc/*"                     # Documentation branches
+      - "readme/*"                  # Readme branches
+  - changed-files:
+      - "**/*.md"                   # Markdown files
+      - "docs/**/*"                 # Documentation files
+      - "**/*.ipynb"                # All Jupyter Notebook files
+      - "notebooks/**/*"
+      - "notebook/**/*"
 
-"Chore: CI/CD Config":
-- .github/**
+# Pytest Unit Tests
+unit-test:
+  - changed-files:
+      - "**/test_*.py"              # Unit test files
+      - "tests/**/*"                # Any file in tests directory
 
-"Chore: Code Style":
-- .pre-commit-config.yaml
-- pyproject.toml
-
-"Chore: Requirements":
-- requirements.txt
+revert:
+  - head-branch:
+      - "revert/*"                  # Revert branches
+      - "revert-*"                  # Revert branches

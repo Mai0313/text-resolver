@@ -77,7 +77,7 @@ class CaptchaModule(LightningModule):
     def training_step(
         self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
     ) -> torch.Tensor:
-        losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
+        losses, prediction, _, labels_encoded, current_batch_size = self.model_step(batch)
 
         self.log_loss(losses, self.val_loss, current_batch_size, prefix="train")
         self.log_accuracy(
@@ -114,7 +114,7 @@ class CaptchaModule(LightningModule):
         self.log("val/acc_best", self.val_acc_best.compute(), sync_dist=True, prog_bar=True)
 
     def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
-        losses, prediction, images, labels_encoded, current_batch_size = self.model_step(batch)
+        losses, prediction, _, labels_encoded, current_batch_size = self.model_step(batch)
 
         self.log_loss(losses, self.val_loss, current_batch_size, prefix="test")
         self.log_accuracy(
@@ -154,7 +154,8 @@ class CaptchaModule(LightningModule):
         Examples:
             https://lightning.ai/docs/pytorch/latest/common/lightning_module.html#configure-optimizers
 
-        :return: A dict containing the configured optimizers and learning-rate schedulers to be used for training.
+        Returns:
+            A dict containing the configured optimizers and learning-rate schedulers to be used for training.
         """
         optimizer = self.hparams.optimizer(params=self.trainer.model.parameters())
         if self.hparams.scheduler is not None:

@@ -4,24 +4,23 @@ https://github.com/PyTorchLightning/pytorch-lightning/blob/master/tests/helpers/
 """
 
 import sys
-from typing import Any, Dict, Optional
+from typing import Any
 
-import pytest
 import torch
-from packaging.version import Version
+import pytest
 from pkg_resources import get_distribution
-from pytest import MarkDecorator
+from packaging.version import Version
 
 from tests.helpers.package_available import (
-    _COMET_AVAILABLE,
-    _DEEPSPEED_AVAILABLE,
-    _FAIRSCALE_AVAILABLE,
     _IS_WINDOWS,
-    _MLFLOW_AVAILABLE,
-    _NEPTUNE_AVAILABLE,
     _SH_AVAILABLE,
     _TPU_AVAILABLE,
+    _COMET_AVAILABLE,
     _WANDB_AVAILABLE,
+    _MLFLOW_AVAILABLE,
+    _NEPTUNE_AVAILABLE,
+    _DEEPSPEED_AVAILABLE,
+    _FAIRSCALE_AVAILABLE,
 )
 
 
@@ -42,9 +41,9 @@ class RunIf:
     def __new__(
         cls,
         min_gpus: int = 0,
-        min_torch: Optional[str] = None,
-        max_torch: Optional[str] = None,
-        min_python: Optional[str] = None,
+        min_torch: str | None = None,
+        max_torch: str | None = None,
+        min_python: str | None = None,
         skip_windows: bool = False,
         sh: bool = False,
         tpu: bool = False,
@@ -55,7 +54,7 @@ class RunIf:
         comet: bool = False,
         mlflow: bool = False,
         **kwargs: dict[Any, Any],
-    ) -> MarkDecorator:
+    ) -> pytest.MarkDecorator:
         """Creates a new `@RunIf` `MarkDecorator` decorator.
 
         :param min_gpus: Min number of GPUs required to run test.
@@ -133,7 +132,7 @@ class RunIf:
             conditions.append(not _MLFLOW_AVAILABLE)
             reasons.append("mlflow")
 
-        reasons = [rs for cond, rs in zip(conditions, reasons) if cond]
+        reasons = [rs for cond, rs in zip(conditions, reasons, strict=False) if cond]
         return pytest.mark.skipif(
             condition=any(conditions), reason=f"Requires: [{' + '.join(reasons)}]", **kwargs
         )

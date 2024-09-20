@@ -1,10 +1,8 @@
 import glob
 
-import pandas as pd
-import pytest
 import torch
-from omegaconf import DictConfig, OmegaConf
-
+import pytest
+from omegaconf import OmegaConf
 from src.data.captcha_datamodule import CaptchaDataModule
 
 # flake8: noqa: E501
@@ -39,11 +37,15 @@ def test_captcha_datamodule(batch_size: int) -> None:
 
         dm.prepare_data()
 
-        assert not dm.data_train and not dm.data_val and not dm.data_test
+        assert not (dm.data_train and dm.data_val and dm.data_test)
 
         dm.setup(stage="test")
-        assert dm.data_train and dm.data_val and dm.data_test
-        assert dm.train_dataloader() and dm.val_dataloader() and dm.test_dataloader()
+        assert dm.data_train
+        assert dm.data_val
+        assert dm.data_test
+        assert dm.train_dataloader()
+        assert dm.val_dataloader()
+        assert dm.test_dataloader()
 
         assert len(dm.data_val) == len(dm.data_test)
 
