@@ -1,13 +1,12 @@
 """This file prepares config fixtures for other tests."""
 
-import subprocess
 from pathlib import Path
 
-import pytest
-import rootutils
 from hydra import compose, initialize
+import pytest
+from omegaconf import DictConfig, open_dict
+import rootutils
 from hydra.core.global_hydra import GlobalHydra
-from omegaconf import DictConfig, OmegaConf, open_dict
 
 
 @pytest.fixture(scope="package")

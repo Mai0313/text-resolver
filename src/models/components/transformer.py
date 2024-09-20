@@ -1,10 +1,9 @@
 import math
 
 import torch
-from einops.layers.torch import Rearrange
-from pytorch_lightning import LightningModule
 from torch import nn
-from torchvision.transforms import Compose, Resize, ToTensor
+from pytorch_lightning import LightningModule
+from einops.layers.torch import Rearrange
 
 
 class PatchEmbedding(nn.Module):

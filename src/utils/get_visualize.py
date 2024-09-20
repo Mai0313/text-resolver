@@ -1,8 +1,7 @@
-import autorootcwd
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from torch.nn import functional as F
+from torch.nn import functional as F  # noqa: N812
+import matplotlib.pyplot as plt
 
 from src.utils.image_encoder import ImageEncoder
 
@@ -36,7 +35,8 @@ class DataVisualizer:
     def visualize_prediction(self, images, labels):
         """Visualize the prediction of the model."""
         labels_one_hot = F.one_hot(labels, num_classes=36).float()
-        indices = np.random.choice(len(images), 10, replace=False)
+        rng = np.random.default_rng()
+        indices = rng.choice(len(images), 10, replace=False)
 
         correct_count = 0
         total_count = 0

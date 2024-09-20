@@ -1,5 +1,5 @@
-from lightning import LightningModule
 from torch import nn
+from lightning import LightningModule
 
 
 class CaptchaNet(LightningModule):

@@ -1,10 +1,8 @@
 import glob
 
-import pandas as pd
-import pytest
 import torch
-from omegaconf import DictConfig, OmegaConf
-
+import pytest
+from omegaconf import OmegaConf
 from src.data.captcha_datamodule import CaptchaDataModule
 
 # flake8: noqa: E501

@@ -1,7 +1,7 @@
 import hydra
 from lightning import Callback
-from lightning.pytorch.loggers import Logger
 from omegaconf import DictConfig
+from lightning.pytorch.loggers import Logger
 
 from src.utils import pylogger
 

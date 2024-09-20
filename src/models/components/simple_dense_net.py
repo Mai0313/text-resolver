@@ -39,10 +39,14 @@ class SimpleDenseNet(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform a single forward pass through the network.
 
-        :param x: The input tensor.
-        :return: A tensor of predictions.
+        Args:
+            x: The input tensor.
+
+        Returns:
+            A tensor of predictions.
         """
-        batch_size, channels, width, height = x.size()
+        # batch_size, channels, width, height = x.size()
+        batch_size, *_ = x.size()
 
         # (batch, 1, width, height) -> (batch, 1*width*height)
         x = x.view(batch_size, -1)

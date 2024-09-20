@@ -1,10 +1,12 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import hydra
-import rootutils
-from lightning import LightningDataModule, LightningModule, Trainer
-from lightning.pytorch.loggers import Logger
+
+if TYPE_CHECKING:
+    from lightning import Trainer, LightningModule, LightningDataModule
+    from lightning.pytorch.loggers import Logger
 from omegaconf import DictConfig
+import rootutils
 
 rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # ------------------------------------------------------------------------------------ #
@@ -36,10 +38,17 @@ def evaluate(cfg: DictConfig) -> tuple[dict[str, Any], dict[str, Any]]:
     This method is wrapped in optional @task_wrapper decorator, that controls the behavior during
     failure. Useful for multiruns, saving info about the crash, etc.
 
-    :param cfg: DictConfig configuration composed by Hydra.
-    :return: Tuple[dict, dict] with metrics and dict with all instantiated objects.
+    Args:
+        cfg: DictConfig configuration composed by Hydra.
+
+    Returns:
+        tuple[dict[str, Any], dict[str, Any]] with metrics and dict with all instantiated objects.
+
+    Raises:
+        ValueError: If `cfg.ckpt_path` is None.
     """
-    assert cfg.ckpt_path
+    if cfg.ckpt_path is None:
+        raise ValueError("cfg.ckpt_path is None! Please provide a checkpoint path to evaluate.")
 
     log.info(f"Instantiating datamodule <{cfg.data._target_}>")
     datamodule: LightningDataModule = hydra.utils.instantiate(cfg.data)
