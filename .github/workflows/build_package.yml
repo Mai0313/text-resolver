@@ -45,8 +45,8 @@ jobs:
           python_version: '3.10' # Optional, default is 3.10
           use-uv: 'true' # Optional, default is true
           pypi_source: 'https://pypi.org/simple' # Optional
-          http_proxy: ${{ secrets.HTTP_PROXY }} # Optional
-          https_proxy: ${{ secrets.HTTPS_PROXY }} # Optional
+          # http_proxy: ${{ secrets.HTTP_PROXY }} # Optional
+          # https_proxy: ${{ secrets.HTTPS_PROXY }} # Optional
 
       - name: Get the version
         id: metadata
