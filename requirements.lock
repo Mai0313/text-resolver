@@ -10,22 +10,352 @@
 #   universal: true
 
 -e file:.
+absl-py==2.1.0
+    # via tensorboard
+affine==2.4.0
+    # via rasterio
+aim==3.24.0
+    # via resolver
+aim-ui==3.24.0
+    # via aim
+aimrecords==0.0.7
+    # via aim
+aimrocks==0.5.2
+    # via aim
+aiofiles==24.1.0
+    # via aim
+aiohappyeyeballs==2.4.0
+    # via aiohttp
+aiohttp==3.10.5
+    # via aiohttp-retry
+    # via fsspec
+aiohttp-retry==2.8.3
+    # via dvc-http
+    # via scmrepo
+aiosignal==1.3.1
+    # via aiohttp
+alembic==1.13.2
+    # via aim
+    # via mlflow
+    # via optuna
+amqp==5.2.0
+    # via kombu
+aniso8601==9.0.1
+    # via graphene
 annotated-types==0.7.0
     # via pydantic
+antlr4-python3-runtime==4.9.3
+    # via hydra-core
+    # via omegaconf
+anyio==4.5.0
+    # via starlette
+appdirs==1.4.4
+    # via iterative-telemetry
+    # via pydrive2
+async-timeout==4.0.3 ; python_full_version < '3.11'
+    # via aiohttp
+asyncssh==2.17.0
+    # via scmrepo
+atpublic==5.0
+    # via flufl-lock
+attrs==24.2.0
+    # via aiohttp
+    # via cmd2
+    # via dvc
+    # via dvc-data
+    # via rasterio
+    # via sqltrie
+autopage==0.5.2
+    # via cliff
+autorootcwd==1.0.1
+    # via resolver
+base58==2.0.1
+    # via aimrecords
+billiard==4.2.0
+    # via celery
+blinker==1.8.2
+    # via flask
+boto3==1.35.23
+    # via aim
+botocore==1.35.23
+    # via boto3
+    # via s3transfer
+cachetools==5.5.0
+    # via aim
+    # via google-auth
+    # via mlflow-skinny
+celery==5.4.0
+    # via dvc
+    # via dvc-task
+certifi==2022.12.7
+    # via rasterio
+    # via requests
+    # via sentry-sdk
+cffi==1.17.1
+    # via cryptography
+    # via pygit2
+charset-normalizer==2.1.1
+    # via requests
+click==8.1.7
+    # via aim
+    # via celery
+    # via click-didyoumean
+    # via click-plugins
+    # via click-repl
+    # via cligj
+    # via flask
+    # via mlflow-skinny
+    # via rasterio
+    # via typer
+    # via uvicorn
+    # via wandb
+click-didyoumean==0.3.1
+    # via celery
+click-plugins==1.1.1
+    # via celery
+    # via rasterio
+click-repl==0.3.0
+    # via celery
+cliff==4.7.0
+    # via optuna
+cligj==0.7.2
+    # via rasterio
+cloudpickle==3.0.0
+    # via mlflow-skinny
+cmaes==0.11.1
+    # via optuna
+cmd2==2.4.3
+    # via cliff
+colorama==0.4.6
+    # via click
+    # via colorlog
+    # via dvc
+    # via tqdm
+colorlog==6.8.2
+    # via hydra-colorlog
+    # via optuna
+configobj==5.0.8
+    # via dvc
+contourpy==1.3.0
+    # via matplotlib
+cryptography==43.0.1
+    # via aim
+    # via asyncssh
+    # via pyopenssl
+cycler==0.12.1
+    # via matplotlib
+databricks-sdk==0.32.3
+    # via mlflow-skinny
+deprecated==1.2.14
+    # via opentelemetry-api
+dictdiffer==0.9.0
+    # via dvc-data
+diskcache==5.6.3
+    # via dvc-data
+distro==1.9.0
+    # via dvc
+    # via iterative-telemetry
+docker==7.1.0
+    # via mlflow
+docker-pycreds==0.4.0
+    # via wandb
+dpath==2.2.0
+    # via dvc
+dulwich==0.22.1
+    # via dvc
+    # via dvc-studio-client
+    # via scmrepo
+dvc==3.55.2
+    # via dvc-gdrive
+    # via resolver
+dvc-data==3.16.5
+    # via dvc
+dvc-gdrive==3.0.1
+    # via dvc
+dvc-http==2.32.0
+    # via dvc
+dvc-objects==5.1.0
+    # via dvc
+    # via dvc-data
+dvc-render==1.0.2
+    # via dvc
+dvc-studio-client==0.21.0
+    # via dvc
+dvc-task==0.4.0
+    # via dvc
+einops==0.8.0
+    # via resolver
+entrypoints==0.4
+    # via gto
+exceptiongroup==1.2.2 ; python_full_version < '3.11'
+    # via anyio
+fastapi==0.115.0
+    # via aim
 filelock==3.13.1
+    # via aim
+    # via iterative-telemetry
     # via torch
     # via triton
+fire==0.6.0
+    # via resolver
+flask==3.0.3
+    # via mlflow
+flatten-dict==0.4.2
+    # via dvc
+flufl-lock==8.1.0
+    # via dvc
+fonttools==4.53.1
+    # via matplotlib
+frozenlist==1.4.1
+    # via aiohttp
+    # via aiosignal
 fsspec==2024.2.0
+    # via dvc
+    # via dvc-data
+    # via dvc-http
+    # via dvc-objects
+    # via lightning
+    # via pydrive2
+    # via pytorch-lightning
+    # via scmrepo
     # via torch
+funcy==2.0
+    # via dvc
+    # via dvc-data
+    # via dvc-objects
+    # via dvc-task
+    # via gto
+    # via pydrive2
+    # via scmrepo
+gitdb==4.0.11
+    # via gitpython
+gitpython==3.1.43
+    # via mlflow-skinny
+    # via scmrepo
+    # via wandb
+google-api-core==2.20.0
+    # via google-api-python-client
+google-api-python-client==2.146.0
+    # via pydrive2
+google-auth==2.35.0
+    # via databricks-sdk
+    # via google-api-core
+    # via google-api-python-client
+    # via google-auth-httplib2
+google-auth-httplib2==0.2.0
+    # via google-api-python-client
+googleapis-common-protos==1.65.0
+    # via google-api-core
+grandalf==0.8
+    # via dvc
+graphene==3.3
+    # via mlflow
+graphql-core==3.2.4
+    # via graphene
+    # via graphql-relay
+graphql-relay==3.2.0
+    # via graphene
+greenlet==3.1.0 ; (python_full_version < '3.13' and platform_machine == 'AMD64') or (python_full_version < '3.13' and platform_machine == 'WIN32') or (python_full_version < '3.13' and platform_machine == 'aarch64') or (python_full_version < '3.13' and platform_machine == 'amd64') or (python_full_version < '3.13' and platform_machine == 'ppc64le') or (python_full_version < '3.13' and platform_machine == 'win32') or (python_full_version < '3.13' and platform_machine == 'x86_64')
+    # via sqlalchemy
+grpcio==1.66.1
+    # via tensorboard
+gto==1.7.1
+    # via dvc
+gunicorn==23.0.0 ; platform_system != 'Windows'
+    # via mlflow
+h11==0.14.0
+    # via uvicorn
+httplib2==0.22.0
+    # via google-api-python-client
+    # via google-auth-httplib2
+    # via oauth2client
+hydra-colorlog==1.2.0
+    # via resolver
+hydra-core==1.3.2
+    # via dvc
+    # via hydra-colorlog
+    # via hydra-optuna-sweeper
+    # via resolver
+hydra-optuna-sweeper==1.2.0
+    # via resolver
+idna==3.4
+    # via anyio
+    # via requests
+    # via yarl
+importlib-metadata==8.5.0
+    # via mlflow-skinny
+iterative-telemetry==0.0.9
+    # via dvc
+itsdangerous==2.2.0
+    # via flask
 jinja2==3.1.3
+    # via aim
+    # via flask
+    # via mlflow
     # via torch
+jmespath==1.0.1
+    # via boto3
+    # via botocore
+joblib==1.4.2
+    # via scikit-learn
+kiwisolver==1.4.7
+    # via matplotlib
+kombu==5.4.2
+    # via celery
+    # via dvc
+    # via dvc-task
+lightning==2.4.0
+    # via resolver
+lightning-utilities==0.11.7
+    # via lightning
+    # via pytorch-lightning
+    # via torchmetrics
+mako==1.3.5
+    # via alembic
+markdown==3.7
+    # via mlflow
+    # via tensorboard
+markdown-it-py==3.0.0
+    # via rich
 markupsafe==2.1.5
     # via jinja2
+    # via mako
+    # via werkzeug
+matplotlib==3.9.2
+    # via mlflow
+    # via resolver
+mdurl==0.1.2
+    # via markdown-it-py
+mlflow==2.16.2
+    # via resolver
+mlflow-skinny==2.16.2
+    # via mlflow
 mpmath==1.3.0
     # via sympy
+multidict==6.1.0
+    # via aiohttp
+    # via yarl
 networkx==3.2.1
+    # via dvc
     # via torch
 numpy==1.26.3
+    # via aim
+    # via cmaes
+    # via contourpy
+    # via matplotlib
+    # via mlflow
+    # via opencv-contrib-python
+    # via optuna
+    # via pandas
+    # via pyarrow
+    # via rasterio
+    # via scikit-learn
+    # via scipy
+    # via shapely
+    # via snuggs
+    # via tensorboard
+    # via tensorboardx
+    # via torchmetrics
     # via torchvision
 nvidia-cublas-cu12==12.4.2.65 ; platform_machine == 'x86_64' and platform_system == 'Linux'
     # via nvidia-cudnn-cu12
@@ -56,25 +386,338 @@ nvidia-nvjitlink-cu12==12.4.99 ; platform_machine == 'x86_64' and platform_syste
     # via torch
 nvidia-nvtx-cu12==12.4.99 ; platform_machine == 'x86_64' and platform_system == 'Linux'
     # via torch
+oauth2client==4.1.3
+    # via pydrive2
+omegaconf==2.3.0
+    # via dvc
+    # via hydra-core
+opencv-contrib-python==4.10.0.84
+    # via resolver
+opentelemetry-api==1.16.0
+    # via mlflow-skinny
+    # via opentelemetry-sdk
+opentelemetry-sdk==1.16.0
+    # via mlflow-skinny
+opentelemetry-semantic-conventions==0.37b0
+    # via opentelemetry-sdk
+optuna==2.10.1
+    # via hydra-optuna-sweeper
+orjson==3.10.7 ; implementation_name == 'cpython'
+    # via dvc-data
+    # via sqltrie
+packaging==22.0
+    # via aim
+    # via dvc
+    # via gunicorn
+    # via hydra-core
+    # via lightning
+    # via lightning-utilities
+    # via matplotlib
+    # via mlflow-skinny
+    # via optuna
+    # via pytorch-lightning
+    # via tensorboard
+    # via tensorboardx
+    # via torchmetrics
+pandas==2.2.3
+    # via mlflow
+pathspec==0.12.1
+    # via dvc
+    # via scmrepo
+pbr==6.1.0
+    # via stevedore
 pillow==10.2.0
+    # via aim
+    # via matplotlib
     # via torchvision
+platformdirs==3.11.0
+    # via dvc
+    # via wandb
+prettytable==3.11.0
+    # via cliff
+prompt-toolkit==3.0.47
+    # via click-repl
+proto-plus==1.24.0
+    # via google-api-core
+protobuf==5.28.2
+    # via google-api-core
+    # via googleapis-common-protos
+    # via mlflow-skinny
+    # via proto-plus
+    # via tensorboard
+    # via tensorboardx
+    # via wandb
+psutil==6.0.0
+    # via aim
+    # via dvc
+    # via flufl-lock
+    # via wandb
+pyarrow==17.0.0
+    # via mlflow
+pyasn1==0.6.1
+    # via oauth2client
+    # via pyasn1-modules
+    # via rsa
+pyasn1-modules==0.4.1
+    # via google-auth
+    # via oauth2client
+pycparser==2.22
+    # via cffi
 pydantic==2.7.4
-    # via text-resolver
+    # via fastapi
+    # via gto
+    # via resolver
 pydantic-core==2.18.4
     # via pydantic
+pydot==3.0.1
+    # via dvc
+pydrive2==1.20.0
+    # via dvc-gdrive
+pygit2==1.15.1
+    # via scmrepo
+pygments==2.18.0
+    # via rich
+pygtrie==2.5.0
+    # via dvc
+    # via dvc-data
+    # via scmrepo
+    # via sqltrie
+pyopenssl==24.2.1
+    # via pydrive2
+pyparsing==3.1.4
+    # via dvc
+    # via grandalf
+    # via httplib2
+    # via matplotlib
+    # via pydot
+    # via snuggs
+pyperclip==1.9.0
+    # via cmd2
+pyreadline3==3.5.4 ; sys_platform == 'win32'
+    # via cmd2
+pyrootutils==1.0.4
+    # via autorootcwd
+python-dateutil==2.9.0.post0
+    # via aim
+    # via botocore
+    # via celery
+    # via matplotlib
+    # via pandas
+python-dotenv==1.0.1
+    # via autorootcwd
+    # via pyrootutils
+    # via rootutils
+pytorch-lightning==2.4.0
+    # via lightning
+pytz==2024.2
+    # via aim
+    # via pandas
+pywin32==306 ; sys_platform == 'win32'
+    # via docker
+    # via dvc-task
+pyyaml==6.0.2
+    # via cliff
+    # via lightning
+    # via mlflow-skinny
+    # via omegaconf
+    # via optuna
+    # via pydrive2
+    # via pytorch-lightning
+    # via wandb
+rasterio==1.3.11
+    # via resolver
+requests==2.28.1
+    # via aim
+    # via databricks-sdk
+    # via docker
+    # via dvc
+    # via dvc-studio-client
+    # via google-api-core
+    # via iterative-telemetry
+    # via mlflow-skinny
+    # via wandb
+restrictedpython==7.2
+    # via aim
+rich==13.8.1
+    # via dvc
+    # via gto
+    # via resolver
+    # via typer
+rootutils==1.0.7
+    # via resolver
+rsa==4.9
+    # via google-auth
+    # via oauth2client
+ruamel-yaml==0.18.6
+    # via dvc
+    # via gto
+ruamel-yaml-clib==0.2.8 ; python_full_version < '3.13' and platform_python_implementation == 'CPython'
+    # via ruamel-yaml
+s3transfer==0.10.2
+    # via boto3
+scikit-learn==1.5.2
+    # via mlflow
+scipy==1.14.1
+    # via mlflow
+    # via optuna
+    # via scikit-learn
+scmrepo==3.3.7
+    # via dvc
+    # via gto
+semver==3.0.2
+    # via gto
+sentry-sdk==2.14.0
+    # via wandb
+setproctitle==1.3.3
+    # via wandb
+setuptools==70.0.0
+    # via dulwich
+    # via lightning-utilities
+    # via opentelemetry-api
+    # via opentelemetry-sdk
+    # via rasterio
+    # via tensorboard
+    # via wandb
+    # via zc-lockfile
+shapely==2.0.6
+    # via resolver
+shellingham==1.5.4
+    # via typer
+shortuuid==1.0.13
+    # via dvc
+    # via dvc-task
+shtab==1.7.1
+    # via dvc
+six==1.16.0
+    # via configobj
+    # via docker-pycreds
+    # via fire
+    # via flatten-dict
+    # via oauth2client
+    # via python-dateutil
+    # via tensorboard
+smmap==5.0.1
+    # via gitdb
+sniffio==1.3.1
+    # via anyio
+snuggs==1.4.7
+    # via rasterio
+sqlalchemy==2.0.35
+    # via aim
+    # via alembic
+    # via mlflow
+    # via optuna
+    # via resolver
+sqlparse==0.5.1
+    # via mlflow-skinny
+sqltrie==0.11.1
+    # via dvc-data
+starlette==0.38.5
+    # via fastapi
+stevedore==5.3.0
+    # via cliff
 sympy==1.12
     # via torch
+tabulate==0.9.0
+    # via dvc
+    # via gto
+tensorboard==2.17.1
+    # via resolver
+tensorboard-data-server==0.7.2
+    # via tensorboard
+tensorboardx==2.6.2.2
+    # via resolver
+termcolor==2.4.0
+    # via fire
+threadpoolctl==3.5.0
+    # via scikit-learn
+tomlkit==0.13.2
+    # via dvc
 torch==2.4.1+cu124
-    # via text-resolver
+    # via lightning
+    # via pytorch-lightning
+    # via resolver
     # via torchaudio
+    # via torchmetrics
     # via torchvision
 torchaudio==2.4.1+cu124
-    # via text-resolver
+    # via resolver
+torchmetrics==1.0.3
+    # via lightning
+    # via pytorch-lightning
 torchvision==0.19.1+cu124
-    # via text-resolver
+    # via resolver
+tqdm==4.64.1
+    # via aim
+    # via dvc
+    # via dvc-data
+    # via fsspec
+    # via lightning
+    # via optuna
+    # via pydrive2
+    # via pytorch-lightning
+    # via scmrepo
 triton==3.0.0 ; python_full_version < '3.13' and platform_machine == 'x86_64' and platform_system == 'Linux'
     # via torch
+typer==0.12.5
+    # via gto
 typing-extensions==4.9.0
+    # via alembic
+    # via anyio
+    # via asyncssh
+    # via fastapi
+    # via lightning
+    # via lightning-utilities
+    # via multidict
+    # via opentelemetry-sdk
     # via pydantic
     # via pydantic-core
+    # via pytorch-lightning
+    # via sqlalchemy
     # via torch
+    # via typer
+    # via uvicorn
+tzdata==2024.1
+    # via celery
+    # via kombu
+    # via pandas
+uritemplate==4.1.1
+    # via google-api-python-client
+urllib3==1.26.13
+    # via botocore
+    # via docker
+    # via dulwich
+    # via requests
+    # via sentry-sdk
+uvicorn==0.30.6
+    # via aim
+vine==5.1.0
+    # via amqp
+    # via celery
+    # via kombu
+voluptuous==0.15.2
+    # via dvc
+    # via dvc-studio-client
+waitress==3.0.0 ; platform_system == 'Windows'
+    # via mlflow
+wandb==0.18.1
+    # via resolver
+wcwidth==0.2.13
+    # via cmd2
+    # via prettytable
+    # via prompt-toolkit
+websockets==13.0.1
+    # via aim
+werkzeug==3.0.4
+    # via flask
+    # via tensorboard
+wget==3.2
+    # via resolver
+wrapt==1.16.0
+    # via deprecated
+yarl==1.11.1
+    # via aiohttp
+zc-lockfile==3.0.post1
+    # via dvc
+zipp==3.20.2
+    # via importlib-metadata
