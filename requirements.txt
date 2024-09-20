@@ -1,24 +1,32 @@
+# Cuda 12.4
 # --index-url https://pypi.org/simple
 # --extra-index-url https://download.pytorch.org/whl/
 # --trusted-host pypi.org
 # torch==2.4.0+cu124
-# torchvision==0.16.0+cu118
-# torchaudio==2.1.0+cu118
+# torchvision==0.19.1+cu124
+# torchaudio==2.4.1+cu124
 
---index-url https://pypi.org/simple
---extra-index-url https://download.pytorch.org/whl/cu116
---trusted-host pypi.org
-torch==1.12.1+cu116
-torchvision==0.13.1+cu116
-torchaudio==0.12.1+cu116
-Pillow==9.5.0  # If you are running on torch1.12, you need to install Pillow==9.5.0
+# Cuda 11.6
+# --index-url https://pypi.org/simple
+# --extra-index-url https://download.pytorch.org/whl/cu116
+# --trusted-host pypi.org
+# torch==1.12.1+cu116
+# torchvision==0.13.1+cu116
+# torchaudio==0.12.1+cu116
+# Pillow==9.5.0  # If you are running on torch1.12, you need to install Pillow==9.5.0
+
+# CPU
+torch
+torchvision
+torchaudio
+Pillow
 
 # Basic Packages
-lightning==2.1.2
+lightning
 mlflow
 pydantic
 SQLAlchemy
-# aim<4.0.0
+aim<4.0.0
 dvc[gdrive]
 rich
 hydra-core
