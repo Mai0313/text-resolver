@@ -162,3 +162,5 @@ cython_debug/
 /data/
 
 /.github/reports/
+
+logs/
