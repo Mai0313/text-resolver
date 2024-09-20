@@ -325,6 +325,10 @@ ignore = [
     "PERF401",
     # Use `list` or `list.copy` to create a copy of a list
     "PERF402",
+    # `return` is not documented in docstring
+    "DOC201",
+    # Raised exception `TypeError` missing from docstring
+    "DOC501",
     ]
 
 [tool.ruff.lint.pycodestyle]
@@ -352,7 +356,7 @@ keep-runtime-typing = true
 # Ignore `E402` (import violations) in all `__init__.py` files, and in `path/to/file.py`.
 "__init__.py" = ["E402", "F401"]
 "*.ipynb" = ["T201", "F401", "S105", "F811", "ANN", "PERF", "SLF"]
-"tests/*" = ["S101", "ANN"]
+"tests/*" = ["S101", "ANN", "DOC", "C901"]
 "notebooks/exp/*.ipynb" = ["UP", "DOC", "RUF", "D", "C"]
 
 [tool.ruff.lint.isort]

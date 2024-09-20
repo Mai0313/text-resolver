@@ -1,6 +1,7 @@
 """This file prepares config fixtures for other tests."""
 
 from pathlib import Path
+from collections.abc import Generator
 
 from hydra import compose, initialize
 import pytest
@@ -61,8 +62,8 @@ def cfg_eval_global() -> DictConfig:
     return cfg
 
 
-@pytest.fixture(scope="function")
-def cfg_train(cfg_train_global: DictConfig, tmp_path: Path) -> DictConfig:
+@pytest.fixture
+def cfg_train(cfg_train_global: DictConfig, tmp_path: Path) -> Generator[DictConfig, None, None]:
     """A pytest fixture built on top of the `cfg_train_global()` fixture, which accepts a temporary
     logging path `tmp_path` for generating a temporary logging path.
 
@@ -84,8 +85,8 @@ def cfg_train(cfg_train_global: DictConfig, tmp_path: Path) -> DictConfig:
     GlobalHydra.instance().clear()
 
 
-@pytest.fixture(scope="function")
-def cfg_eval(cfg_eval_global: DictConfig, tmp_path: Path) -> DictConfig:
+@pytest.fixture
+def cfg_eval(cfg_eval_global: DictConfig, tmp_path: Path) -> Generator[DictConfig, None, None]:
     """A pytest fixture built on top of the `cfg_eval_global()` fixture, which accepts a temporary
     logging path `tmp_path` for generating a temporary logging path.
 

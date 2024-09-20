@@ -8,7 +8,6 @@ from typing import Any
 
 import torch
 import pytest
-from pytest import MarkDecorator
 from pkg_resources import get_distribution
 from packaging.version import Version
 
@@ -55,7 +54,7 @@ class RunIf:
         comet: bool = False,
         mlflow: bool = False,
         **kwargs: dict[Any, Any],
-    ) -> MarkDecorator:
+    ) -> pytest.MarkDecorator:
         """Creates a new `@RunIf` `MarkDecorator` decorator.
 
         :param min_gpus: Min number of GPUs required to run test.
