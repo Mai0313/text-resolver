@@ -39,7 +39,7 @@ def test_train_fast_dev_run(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
-@pytest.mark.skip(reason="TODO: Implement this test.")
+@pytest.mark.skip(reason="TODO: Implement this test.")  # type: ignore[operator]
 @RunIf(min_gpus=1)
 def test_train_fast_dev_run_gpu(cfg_train: DictConfig) -> None:
     """Run for 1 train, val and test step on GPU.
@@ -69,7 +69,7 @@ def test_train_fast_dev_run_gpu(cfg_train: DictConfig) -> None:
     train(cfg_train)
 
 
-@pytest.mark.skip(reason="TODO: Implement this test.")
+@pytest.mark.skip(reason="TODO: Implement this test.")  # type: ignore[operator]
 @RunIf(min_gpus=1)
 @pytest.mark.slow
 def test_train_epoch_gpu_amp(cfg_train: DictConfig) -> None:

@@ -67,12 +67,12 @@ repos:
     hooks:
       - id: nbstripout
 
-  # - repo: https://github.com/codespell-project/codespell
-  #   rev: v2.3.0
-  #   hooks:
-  #     - id: codespell
-  #       additional_dependencies:
-  #         - tomli
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        additional_dependencies:
+          - tomli
 
   # - repo: local
   #   hooks:
@@ -81,12 +81,15 @@ repos:
   #       language: system
   #       entry: bash -c 'if command -v code2flow >/dev/null 2>&1; then code2flow **/**/*.py -o ./.github/code2flow/flow.png; else echo "code2flow not installed, skipping"; fi'
 
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v1.11.2
-  #   hooks:
-  #     - id: mypy
-  #       additional_dependencies:
-  #         - "pydantic>=2.8.2"
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - "pydantic>=2.8.2"
+          - "types-PyYAML"
+          - "types-requests"
+          - "types-setuptools"
 
   # - repo: https://github.com/RobertCraigie/pyright-python
   #   rev: v1.1.374

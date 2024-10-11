@@ -28,7 +28,7 @@ overrides = [
 ]
 
 
-@RunIf(sh=True)
+@RunIf(sh=True)  # type: ignore[operator]
 @pytest.mark.slow
 def test_experiments_cpu(tmp_path: Path) -> None:
     """Test running all available experiment configs with one epoch by CPU.
@@ -57,7 +57,7 @@ def test_experiments_cpu(tmp_path: Path) -> None:
     run_sh_command(command)
 
 
-@RunIf(sh=True, min_gpus=1)
+@RunIf(sh=True, min_gpus=1)  # type: ignore[operator]
 @pytest.mark.slow
 def test_experiments_gpu(tmp_path: Path) -> None:
     """Test running all available experiment configs with one epoch by GPU.
@@ -86,7 +86,7 @@ def test_experiments_gpu(tmp_path: Path) -> None:
     run_sh_command(command)
 
 
-@RunIf(sh=True)
+@RunIf(sh=True)  # type: ignore[operator]
 @pytest.mark.slow
 def test_hydra_sweep(tmp_path: Path) -> None:
     """Test default hydra sweep.
