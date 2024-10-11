@@ -33,7 +33,12 @@ def test_captcha_datamodule(batch_size: int) -> None:
         pin_memory = cfg.data.pin_memory
         force_parse_data = cfg.data.force_parse_data
 
-        dm = CaptchaDataModule(batch_size, num_workers, pin_memory, force_parse_data)
+        dm = CaptchaDataModule(
+            batch_size=batch_size,
+            num_workers=num_workers,
+            pin_memory=pin_memory,
+            force_parse_data=force_parse_data,
+        )
 
         dm.prepare_data()
 

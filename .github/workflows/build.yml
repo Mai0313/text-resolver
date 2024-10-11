@@ -18,11 +18,16 @@ jobs:
         run: git config --global http.sslVerify false
 
       - name: Checkout
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
-      - name: Set up Python
+      - name: Get the version
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: metadata
+        uses: battila7/get-version-action@v2
+
+      - name: Setup Python
         uses: actions/setup-python@v5.1.0
         with:
           python-version: '3.10'
@@ -36,18 +41,19 @@ jobs:
 
       - name: Packaging to Executable file
         run: |
-          pyinstaller -F main.py --onefile -n main
+          pyinstaller -F main.py --onefile -n ${{ github.event.repository.name }}
 
       - name: Move and Rename
         shell: pwsh
         run: |
-          Copy-Item -Path ./* -Destination ./dist/ -Recurse -Exclude dist, .git, .cache
+          Copy-Item -Path "./dist/*" -Destination "./" -Recurse -Force
+          Remove-Item -Recurse -Force build, dist, .venv, .cache, .git -ErrorAction SilentlyContinue
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          path: ./dist/*
-          name: ${{ github.event.repository.name }}
+          path: ./*
+          name: ${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}
           if-no-files-found: ignore
           retention-days: 7
           compression-level: 6
@@ -58,36 +64,22 @@ jobs:
         run: |
           Get-ChildItem -Path .
 
-  upload_artifacts:
-    name: Upload Release Assets
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: build_package
-    runs-on: ubuntu-latest
-    # container: catthehacker/ubuntu:act-20.04  # Uncomment it if you use it on Gitea
-
-    steps:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         if: startsWith(github.ref, 'refs/tags/v')
         with:
-          name: ${{ github.event.repository.name }}
-
-      - name: Get the version
-        if: startsWith(github.ref, 'refs/tags/v')
-        id: metadata
-        uses: battila7/get-version-action@v2
+          name: ${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}
+          path: ${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}
 
       - name: Check Files
+        shell: pwsh
         run: |
-          cd ..
-          zip -r ${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}.zip ${{ github.event.repository.name }}
-          ls -al
-          cp -R ${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}.zip ./${{ github.event.repository.name }}/
+          Compress-Archive -Path "${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}" -DestinationPath "${{ github.event.repository.name }}_${{ steps.metadata.outputs.version }}.zip" -Force
+          ls -Force
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/v')
-        # continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

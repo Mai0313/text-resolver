@@ -59,7 +59,7 @@ class CaptchaModule(LightningModule):
 
     def model_step(
         self, batch: tuple[torch.Tensor, torch.Tensor]
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> tuple[dict[str, float], torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         images, labels_encoded = batch
         current_batch_size = images.shape[0]
 
@@ -199,7 +199,3 @@ class CaptchaModule(LightningModule):
             batch_size=batch_size,
             sync_dist=True,
         )
-
-
-if __name__ == "__main__":
-    _ = CaptchaModule(None, None, None)

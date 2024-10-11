@@ -16,9 +16,7 @@ from src.data.components.build_dataset import DataParser, CaptchaDataset, DataDo
 class CaptchaDataModule(LightningDataModule):
     def __init__(
         self,
-        data_dir: str = "data",
-        dataset: list = None,
-        train_val_test_split: Tuple[int, int, int] = (55_000, 5_000, 10_000),
+        dataset: dict[str, dict[str, str]] = {},
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -162,7 +160,3 @@ class CaptchaDataModule(LightningDataModule):
         :param state_dict: The datamodule state returned by `self.state_dict()`.
         """
         pass
-
-
-if __name__ == "__main__":
-    _ = CaptchaDataModule()
